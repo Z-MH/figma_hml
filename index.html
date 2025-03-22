@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI算命App原型</title>
+    <title>App账户体系原型</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
         
         body {
@@ -26,859 +26,1043 @@
         }
         
         .screen {
-            width: 360px;
-            height: 780px;
+            width: 375px;
+            height: 812px;
             background-color: white;
-            border-radius: 30px;
+            border-radius: 40px;
             overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             position: relative;
-            border: 10px solid #333;
-            border-top-width: 60px;
-            border-bottom-width: 60px;
-        }
-        
-        .screen:before {
-            content: '';
-            position: absolute;
-            width: 60px;
-            height: 10px;
-            background: #333;
-            top: -35px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         
         .screen-title {
             text-align: center;
-            padding: 10px;
-            background-color: #f8f8f8;
+            margin-top: 10px;
             font-weight: bold;
-            border-bottom: 1px solid #eee;
+            color: #333;
         }
         
-        .screen-content {
-            height: calc(100% - 40px);
-            overflow-y: auto;
-            padding: 15px;
-        }
-        
-        /* 通用组件样式 */
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #6e45e2, #88d3ce);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 10px 0;
-            text-align: center;
-            cursor: pointer;
-        }
-        
-        .btn-outline {
-            background: transparent;
-            border: 2px solid #6e45e2;
-            color: #6e45e2;
-        }
-        
-        .input-field {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            margin: 10px 0;
-            font-size: 16px;
-        }
-        
-        .card {
+        .status-bar {
+            height: 44px;
             background-color: white;
-            border-radius: 15px;
-            padding: 15px;
-            margin: 10px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        
-        .tab-bar {
             display: flex;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background-color: white;
-            border-top: 1px solid #eee;
-            padding: 10px 0;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
         }
         
-        .tab {
-            flex: 1;
-            text-align: center;
-            color: #888;
-            font-size: 12px;
+        .time {
+            font-weight: 600;
         }
         
-        .tab i {
-            font-size: 20px;
-            margin-bottom: 5px;
-            display: block;
-        }
-        
-        .tab.active {
-            color: #6e45e2;
+        .icons {
+            display: flex;
+            gap: 5px;
         }
         
         .header {
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            background-color: white;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .back-button {
+            color: #007AFF;
+            font-size: 16px;
+        }
+        
+        .content {
+            height: calc(100% - 94px);
+            overflow-y: auto;
+            background-color: #f8f8f8;
+        }
+        
+        .account-card {
+            background: linear-gradient(135deg, #4A90E2, #5C6BC0);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .balance-title {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .balance-amount {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+        
+        .action-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .action-icon {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        
+        .action-text {
+            font-size: 12px;
+        }
+        
+        .transaction-list {
+            padding: 0 15px;
+        }
+        
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .list-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .filter-button {
+            color: #007AFF;
+            font-size: 14px;
+        }
+        
+        .transaction-item {
+            display: flex;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: #666;
+        }
+        
+        .transaction-info {
+            flex: 1;
+        }
+        
+        .transaction-title {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .transaction-time {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .transaction-amount {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .income {
+            color: #4CAF50;
+        }
+        
+        .expense {
+            color: #FF5722;
+        }
+        
+        .detail-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .detail-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .detail-amount {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        .detail-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            background-color: #E8F5E9;
+            color: #4CAF50;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .detail-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .detail-value {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .withdraw-form {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .bank-select {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #eee;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .feature-item {
-            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            color: white;
-            aspect-ratio: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .feature-item i {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-        
-        .feature-item:nth-child(2) {
-            background: linear-gradient(135deg, #84fab0, #8fd3f4);
-        }
-        
-        .feature-item:nth-child(3) {
-            background: linear-gradient(135deg, #fccb90, #d57eeb);
-        }
-        
-        .feature-item:nth-child(4) {
-            background: linear-gradient(135deg, #f6d365, #fda085);
-        }
-        
-        .result-card {
-            background: linear-gradient(135deg, #5ee7df, #b490ca);
-            border-radius: 20px;
-            padding: 20px;
-            color: white;
-            margin: 20px 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .result-card::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 100px;
-            height: 100px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-        }
-        
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: calc(100% - 60px);
-        }
-        
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px;
-        }
-        
-        .message {
-            max-width: 80%;
-            padding: 12px;
-            border-radius: 20px;
-            margin-bottom: 10px;
-            position: relative;
-        }
-        
-        .message.received {
-            background-color: #f1f0f0;
-            align-self: flex-start;
-            border-bottom-left-radius: 5px;
-        }
-        
-        .message.sent {
-            background-color: #6e45e2;
-            color: white;
-            align-self: flex-end;
-            border-bottom-right-radius: 5px;
-            margin-left: auto;
-        }
-        
-        .chat-input {
-            display: flex;
-            padding: 10px;
-            background-color: #f8f8f8;
-            border-top: 1px solid #eee;
-        }
-        
-        .chat-input input {
-            flex: 1;
-            padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .bank-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .bank-logo {
+            width: 30px;
+            height: 30px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin-right: 10px;
         }
         
-        .chat-input button {
-            background-color: #6e45e2;
+        .bank-name {
+            font-size: 16px;
+        }
+        
+        .bank-number {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .primary-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #007AFF;
             color: white;
             border: none;
-            width: 40px;
-            height: 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        
+        .bank-card {
+            background: linear-gradient(135deg, #333, #666);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px;
+            position: relative;
+        }
+        
+        .bank-card-logo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+        }
+        
+        .bank-card-number {
+            font-size: 18px;
+            letter-spacing: 2px;
+            margin: 30px 0 15px;
+        }
+        
+        .bank-card-name {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .add-card-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border: 1px dashed #ddd;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px;
+            color: #007AFF;
+        }
+        
+        .add-card-icon {
+            margin-right: 10px;
+        }
+        
+        .result-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 20px;
+        }
+        
+        .result-icon {
+            width: 80px;
+            height: 80px;
+            background-color: #E8F5E9;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: #4CAF50;
+            font-size: 40px;
+            margin-bottom: 20px;
         }
         
-        .fortune-type {
+        .result-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .result-message {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tab-bar {
+            height: 50px;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #f0f0f0;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .tab-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 10px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            color: #999;
         }
         
-        .fortune-type i {
-            font-size: 40px;
-            margin-bottom: 10px;
-            color: #6e45e2;
+        .tab-item.active {
+            color: #007AFF;
         }
         
-        .membership-card {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            border-radius: 15px;
-            padding: 20px;
-            color: white;
-            margin: 15px 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .membership-card h3 {
-            font-size: 22px;
-            margin-bottom: 10px;
-        }
-        
-        .membership-card .price {
-            font-size: 28px;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        
-        .membership-card .features {
-            margin: 15px 0;
-        }
-        
-        .membership-card .feature {
-            display: flex;
-            align-items: center;
-            margin: 8px 0;
-        }
-        
-        .membership-card .feature i {
-            margin-right: 10px;
-        }
-        
-        .profile-stats {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px 0;
-            text-align: center;
-        }
-        
-        .stat {
-            flex: 1;
-        }
-        
-        .stat .number {
-            font-size: 24px;
-            font-weight: bold;
-            color: #6e45e2;
-        }
-        
-        .stat .label {
-            font-size: 12px;
-            color: #888;
-        }
-        
-        .menu-list {
-            margin-top: 20px;
-        }
-        
-        .menu-item {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .menu-item i {
-            margin-right: 15px;
-            color: #6e45e2;
+        .tab-icon {
             font-size: 20px;
-            width: 24px;
-            text-align: center;
+            margin-bottom: 4px;
         }
         
-        .menu-item .arrow {
-            margin-left: auto;
-            color: #ccc;
+        .tab-text {
+            font-size: 10px;
+        }
+        
+        .form-notice {
+            font-size: 12px;
+            color: #999;
+            margin-top: 8px;
+        }
+        
+        .segmented-control {
+            display: flex;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        
+        .segment {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .segment.active {
+            background-color: white;
+            color: #007AFF;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
     <div class="prototype-container">
-        <!-- 启动页/登录注册页 -->
-        <div class="screen">
-            <div class="screen-title">启动页/登录注册</div>
-            <div class="screen-content" style="background: linear-gradient(135deg, #6e45e2, #88d3ce); display: flex; flex-direction: column; justify-content: center; align-items: center; color: white;">
-                <div style="text-align: center; margin-bottom: 50px;">
-                    <i class="fas fa-moon" style="font-size: 80px; margin-bottom: 20px;"></i>
-                    <h1 style="font-size: 32px; margin-bottom: 10px;">星辰命理</h1>
-                    <p>AI智能算命，探索命运奥秘</p>
-                </div>
-                
-                <div style="width: 100%; padding: 0 20px; margin-top: auto; margin-bottom: 50px;">
-                    <button class="btn" style="background-color: white; color: #6e45e2;">手机号登录/注册</button>
-                    <div style="display: flex; margin: 20px 0;">
-                        <hr style="flex: 1; margin: auto 0; border-color: rgba(255,255,255,0.3);">
-                        <span style="padding: 0 10px; color: rgba(255,255,255,0.8);">其他登录方式</span>
-                        <hr style="flex: 1; margin: auto 0; border-color: rgba(255,255,255,0.3);">
-                    </div>
-                    <div style="display: flex; justify-content: space-around; margin-top: 20px;">
-                        <div style="text-align: center;">
-                            <div style="width: 50px; height: 50px; background-color: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 5px;">
-                                <i class="fab fa-weixin" style="font-size: 24px;"></i>
-                            </div>
-                            <span style="font-size: 12px;">微信</span>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="width: 50px; height: 50px; background-color: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 5px;">
-                                <i class="fab fa-qq" style="font-size: 24px;"></i>
-                            </div>
-                            <span style="font-size: 12px;">QQ</span>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="width: 50px; height: 50px; background-color: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 5px;">
-                                <i class="fab fa-apple" style="font-size: 24px;"></i>
-                            </div>
-                            <span style="font-size: 12px;">Apple</span>
-                        </div>
+        <!-- 账户中心 -->
+        <div>
+            <div class="screen">
+                <div class="status-bar">
+                    <div class="time">9:41</div>
+                    <div class="icons">
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
                     </div>
                 </div>
-                
-                <p style="font-size: 12px; color: rgba(255,255,255,0.7); text-align: center; margin-bottom: 20px;">
-                    登录即代表您同意《用户协议》和《隐私政策》
-                </p>
-            </div>
-        </div>
-        
-        <!-- 首页 -->
-        <div class="screen">
-            <div class="screen-title">首页</div>
-            <div class="screen-content">
                 <div class="header">
-                    <div style="display: flex; align-items: center;">
-                        <div class="avatar">
-                            <i class="fas fa-user" style="font-size: 24px; color: #888;"></i>
-                        </div>
-                        <div style="margin-left: 10px;">
-                            <div style="font-weight: bold;">星辰用户</div>
-                            <div style="font-size: 12px; color: #888;">查看或编辑个人资料</div>
-                        </div>
-                    </div>
-                    <div>
-                        <i class="fas fa-bell" style="font-size: 24px; color: #888; position: relative;">
-                            <span style="position: absolute; top: -5px; right: -5px; width: 16px; height: 16px; background-color: #ff4d4f; border-radius: 50%; font-size: 10px; display: flex; align-items: center; justify-content: center; color: white;">3</span>
-                        </i>
-                    </div>
+                    <div class="header-title">账户中心</div>
+                    <div><i class="fas fa-ellipsis-h"></i></div>
                 </div>
-                
-                <div style="padding: 15px;">
-                    <div class="card" style="background: linear-gradient(135deg, #a18cd1, #fbc2eb); color: white; position: relative; overflow: hidden;">
-                        <div style="position: absolute; top: -20px; right: -20px; font-size: 100px; opacity: 0.1;">
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h3 style="margin-bottom: 10px;">今日运势</h3>
-                        <p style="margin-bottom: 15px;">今天的你充满活力，适合开始新的计划。</p>
-                        <div style="display: flex; margin-top: 10px;">
-                            <div style="flex: 1; text-align: center;">
-                                <div style="font-size: 12px;">爱情</div>
-                                <div style="display: flex; justify-content: center; margin-top: 5px;">
-                                    <i class="fas fa-star" style="color: #FFD700; margin: 0 2px;"></i>
-                                    <i class="fas fa-star" style="color: #FFD700; margin: 0 2px;"></i>
-                                    <i class="fas fa-star" style="color: #FFD700; margin: 0 2px;"></i>
-                                    <i class="far fa-star" style="color: #FFD700; margin: 0 2px;"></i>
-                                    <i class="far fa-star" style="color: #FFD700; margin: 0 2px;"></i>
+                <div class="content">
+                    <div class="account-card">
+                        <div class="balance-title">账户余额</div>
+                        <div class="balance-amount">¥ 5,280.75</div>
+                        <div class="action-buttons">
+                            <a href="#" class="action-button">
+                                <div class="action-icon">
+                                    <i class="fas fa-arrow-down"></i>
                                 </div>
-                            </div>
-                            <div style="flex: 1; text-align: center;">
-                                <div style="font-size: 12px;">事业</div>
-                                <div style="display: flex; justify-content: center; margin-top: 5px;">
-                                    <i class="fas fa-star" style="color: #FFD700; margin: 0 2px;"></i>
-                                    <i class="fas fa-star" style="color: #FFD700; margin: 0 2px;"></i>
-                                    <i class="fas fa-star" style="color: #FFD700; margin: 0 2px;"></i>
-                                    <i class="fas fa-star" style="color: #FFD700; margin: 0 2px;"></i>
-                                    <i class="far fa-star" style="color: #FFD700; margin: 0 2px;"></i>
+                                <div class="action-text">充值</div>
+                            </a>
+                            <a href="#" class="action-button">
+                                <div class="action-icon">
+                                    <i class="fas fa-arrow-up"></i>
                                 </div>
-                            </div>
-                            <div style="flex: 1; text-align: center;">
-                                <div style="font-size: 12px;">财运</div>
-                                <div style="display: flex; justify-content: center; margin-top: 5px;">
-                                    <i class="fas fa-star" style="color: #FFD700; margin: 0 2px;"></i>
-                                    <i class="fas fa-star" style="color: #FFD700; margin: 0 2px;"></i>
-                                    <i class="far fa-star" style="color: #FFD700; margin: 0 2px;"></i>
-                                    <i class="far fa-star" style="color: #FFD700; margin: 0 2px;"></i>
-                                    <i class="far fa-star" style="color: #FFD700; margin: 0 2px;"></i>
+                                <div class="action-text">提现</div>
+                            </a>
+                            <a href="#" class="action-button">
+                                <div class="action-icon">
+                                    <i class="fas fa-credit-card"></i>
                                 </div>
-                            </div>
+                                <div class="action-text">银行卡</div>
+                            </a>
                         </div>
                     </div>
                     
-                    <h3 style="margin: 20px 0 10px 0;">算命服务</h3>
-                    <div class="feature-grid">
-                        <div class="feature-item">
-                            <i class="fas fa-calendar-alt"></i>
-                            <div>八字命盘</div>
+                    <div class="transaction-list">
+                        <div class="list-header">
+                            <div class="list-title">交易明细</div>
+                            <div class="filter-button">筛选 <i class="fas fa-filter"></i></div>
                         </div>
-                        <div class="feature-item">
-                            <i class="fas fa-hand-sparkles"></i>
-                            <div>塔罗占卜</div>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="transaction-info">
+                                <div class="transaction-title">充值</div>
+                                <div class="transaction-time">2023-07-15 14:30</div>
+                            </div>
+                            <div class="transaction-amount income">+¥1,000.00</div>
                         </div>
-                        <div class="feature-item">
-                            <i class="fas fa-star"></i>
-                            <div>星座运势</div>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <div class="transaction-info">
+                                <div class="transaction-title">购物消费</div>
+                                <div class="transaction-time">2023-07-12 09:45</div>
+                            </div>
+                            <div class="transaction-amount expense">-¥299.50</div>
                         </div>
-                        <div class="feature-item">
-                            <i class="fas fa-user"></i>
-                            <div>面相分析</div>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                            <div class="transaction-info">
+                                <div class="transaction-title">提现</div>
+                                <div class="transaction-time">2023-07-10 16:20</div>
+                            </div>
+                            <div class="transaction-amount expense">-¥500.00</div>
                         </div>
-                    </div>
-                    
-                    <h3 style="margin: 20px 0 10px 0;">热门解读</h3>
-                    <div class="card" style="display: flex; align-items: center;">
-                        <div style="width: 60px; height: 60px; background-color: #f0f0f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
-                            <i class="fas fa-heart" style="font-size: 24px; color: #ff4d4f;"></i>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-gift"></i>
+                            </div>
+                            <div class="transaction-info">
+                                <div class="transaction-title">活动奖励</div>
+                                <div class="transaction-time">2023-07-05 11:15</div>
+                            </div>
+                            <div class="transaction-amount income">+¥88.88</div>
                         </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: bold;">爱情运势详解</div>
-                            <div style="font-size: 12px; color: #888; margin-top: 5px;">探索你的爱情密码，找到真爱之路</div>
-                        </div>
-                        <i class="fas fa-chevron-right" style="color: #ccc;"></i>
-                    </div>
-                    
-                    <div class="card" style="display: flex; align-items: center; margin-top: 10px;">
-                        <div style="width: 60px; height: 60px; background-color: #f0f0f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
-                            <i class="fas fa-briefcase" style="font-size: 24px; color: #52c41a;"></i>
-                        </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: bold;">事业财运分析</div>
-                            <div style="font-size: 12px; color: #888; margin-top: 5px;">了解职业发展方向，把握财富机遇</div>
-                        </div>
-                        <i class="fas fa-chevron-right" style="color: #ccc;"></i>
                     </div>
                 </div>
                 
                 <div class="tab-bar">
-                    <div class="tab active">
-                        <i class="fas fa-home"></i>
-                        <div>首页</div>
+                    <div class="tab-item">
+                        <div class="tab-icon"><i class="fas fa-home"></i></div>
+                        <div class="tab-text">首页</div>
                     </div>
-                    <div class="tab">
-                        <i class="fas fa-compass"></i>
-                        <div>发现</div>
+                    <div class="tab-item active">
+                        <div class="tab-icon"><i class="fas fa-wallet"></i></div>
+                        <div class="tab-text">账户</div>
                     </div>
-                    <div class="tab">
-                        <i class="fas fa-comments"></i>
-                        <div>咨询</div>
+                    <div class="tab-item">
+                        <div class="tab-icon"><i class="fas fa-bell"></i></div>
+                        <div class="tab-text">消息</div>
                     </div>
-                    <div class="tab">
-                        <i class="fas fa-user"></i>
-                        <div>我的</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- 个人信息填写页 -->
-        <div class="screen">
-            <div class="screen-title">个人信息填写</div>
-            <div class="screen-content">
-                <div style="padding: 15px;">
-                    <h2 style="text-align: center; margin-bottom: 20px;">完善个人信息</h2>
-                    <p style="text-align: center; color: #888; margin-bottom: 30px;">请填写真实信息，以获得准确的命理分析</p>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: bold;">姓名</label>
-                        <input type="text" class="input-field" placeholder="请输入您的姓名">
-                    </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: bold;">性别</label>
-                        <div style="display: flex; gap: 10px;">
-                            <div style="flex: 1; padding: 15px; border: 2px solid #6e45e2; border-radius: 10px; text-align: center; color: #6e45e2; font-weight: bold;">
-                                <i class="fas fa-mars" style="margin-right: 5px;"></i> 男
-                            </div>
-                            <div style="flex: 1; padding: 15px; border: 2px solid #ddd; border-radius: 10px; text-align: center; color: #888;">
-                                <i class="fas fa-venus" style="margin-right: 5px;"></i> 女
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: bold;">出生日期</label>
-                        <input type="date" class="input-field" value="1990-01-01">
-                    </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: bold;">出生时间</label>
-                        <input type="time" class="input-field" value="12:00">
-                    </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: bold;">出生地点</label>
-                        <input type="text" class="input-field" placeholder="请输入您的出生地点">
-                    </div>
-                    
-                    <div style="margin-top: 30px;">
-                        <button class="btn">开始分析</button>
-                    </div>
-                    
-                    <p style="text-align: center; font-size: 12px; color: #888; margin-top: 20px;">您的信息将被严格保密，仅用于命理分析</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- 算命方式选择页 -->
-        <div class="screen">
-            <div class="screen-title">算命方式选择</div>
-            <div class="screen-content">
-                <div style="padding: 15px;">
-                    <h2 style="text-align: center; margin-bottom: 10px;">选择算命方式</h2>
-                    <p style="text-align: center; color: #888; margin-bottom: 30px;">多种命理分析方法，全方位解读你的命运</p>
-                    
-                    <div class="fortune-type">
-                        <i class="fas fa-calendar-alt"></i>
-                        <h3>八字命盘</h3>
-                        <p style="text-align: center; color: #888; margin: 10px 0;">根据出生年月日时，分析命理五行</p>
-                        <button class="btn">立即分析</button>
-                    </div>
-                    
-                    <div class="fortune-type">
-                        <i class="fas fa-hand-sparkles"></i>
-                        <h3>塔罗占卜</h3>
-                        <p style="text-align: center; color: #888; margin: 10px 0;">AI智能塔罗牌阵，解读当下困惑</p>
-                        <button class="btn">开始占卜</button>
-                    </div>
-                    
-                    <div class="fortune-type">
-                        <i class="fas fa-star"></i>
-                        <h3>星座运势</h3>
-                        <p style="text-align: center; color: #888; margin: 10px 0;">基于星座和行星位置的运势分析</p>
-                        <button class="btn">查看运势</button>
-                    </div>
-                    
-                    <div class="fortune-type">
-                        <i class="fas fa-user"></i>
-                        <h3>面相分析</h3>
-                        <p style="text-align: center; color: #888; margin: 10px 0;">上传照片，AI智能分析面相命理</p>
-                        <button class="btn">上传照片</button>
+                    <div class="tab-item">
+                        <div class="tab-icon"><i class="fas fa-user"></i></div>
+                        <div class="tab-text">我的</div>
                     </div>
                 </div>
             </div>
+            <div class="screen-title">账户中心</div>
         </div>
         
-        <!-- 结果解读页 -->
-        <div class="screen">
-            <div class="screen-title">结果解读</div>
-            <div class="screen-content">
-                <div style="padding: 15px;">
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        <h2>八字命盘解读</h2>
-                        <p style="color: #888; margin-top: 5px;">基于您的出生信息生成</p>
+        <!-- 交易明细列表 -->
+        <div>
+            <div class="screen">
+                <div class="status-bar">
+                    <div class="time">9:41</div>
+                    <div class="icons">
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
+                    </div>
+                </div>
+                <div class="header">
+                    <div class="back-button"><i class="fas fa-chevron-left"></i></div>
+                    <div class="header-title">交易明细</div>
+                    <div><i class="fas fa-filter"></i></div>
+                </div>
+                <div class="content">
+                    <div class="segmented-control">
+                        <div class="segment active">全部</div>
+                        <div class="segment">收入</div>
+                        <div class="segment">支出</div>
                     </div>
                     
-                    <div class="result-card">
-                        <h3 style="margin-bottom: 10px;">命盘信息</h3>
-                        <div style="display: flex; justify-content: space-between; margin: 15px 0;">
-                            <div style="text-align: center;">
-                                <div style="font-size: 12px; margin-bottom: 5px;">年柱</div>
-                                <div style="font-weight: bold;">庚午</div>
+                    <div class="transaction-list">
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-arrow-down"></i>
                             </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 12px; margin-bottom: 5px;">月柱</div>
-                                <div style="font-weight: bold;">丙子</div>
+                            <div class="transaction-info">
+                                <div class="transaction-title">充值</div>
+                                <div class="transaction-time">2023-07-15 14:30</div>
                             </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 12px; margin-bottom: 5px;">日柱</div>
-                                <div style="font-weight: bold;">壬申</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 12px; margin-bottom: 5px;">时柱</div>
-                                <div style="font-weight: bold;">甲午</div>
-                            </div>
+                            <div class="transaction-amount income">+¥1,000.00</div>
                         </div>
-                        <div style="margin-top: 10px;">
-                            <div style="font-size: 12px; margin-bottom: 5px;">五行分布</div>
-                            <div style="display: flex; height: 10px; border-radius: 5px; overflow: hidden;">
-                                <div style="flex: 2; background-color: #f6d365;"></div>
-                                <div style="flex: 1; background-color: #fda085;"></div>
-                                <div style="flex: 3; background-color: #5ee7df;"></div>
-                                <div style="flex: 2; background-color: #b490ca;"></div>
-                                <div style="flex: 1; background-color: #a18cd1;"></div>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-shopping-bag"></i>
                             </div>
-                            <div style="display: flex; justify-content: space-between; margin-top: 5px; font-size: 12px;">
-                                <div>金</div>
-                                <div>木</div>
-                                <div>水</div>
-                                <div>火</div>
-                                <div>土</div>
+                            <div class="transaction-info">
+                                <div class="transaction-title">购物消费</div>
+                                <div class="transaction-time">2023-07-12 09:45</div>
                             </div>
+                            <div class="transaction-amount expense">-¥299.50</div>
                         </div>
-                    </div>
-                    
-                    <div class="card" style="margin-top: 20px;">
-                        <h3 style="margin-bottom: 15px;">性格特点</h3>
-                        <p>您天生具有领导才能，性格坚毅果断，做事雷厉风行。思维敏捷，善于分析问题，但有时可能显得过于直接。您重视诚信，待人真诚，是值得信赖的朋友。</p>
-                    </div>
-                    
-                    <div class="card" style="margin-top: 20px;">
-                        <h3 style="margin-bottom: 15px;">事业发展</h3>
-                        <p>您适合从事需要决策能力和领导才能的工作，如管理、金融、法律等领域。2024年是您事业发展的关键年，可能会遇到升职或创业的机会，建议把握时机，勇于尝试。</p>
-                    </div>
-                    
-                    <div class="card" style="margin-top: 20px;">
-                        <h3 style="margin-bottom: 15px;">感情运势</h3>
-                        <p>您在感情中注重稳定和忠诚，渴望找到能够理解和支持您的伴侣。近期感情运势平稳，已婚者家庭和睦，单身者可能在社交场合遇到心仪对象。</p>
-                    </div>
-                    
-                    <div class="card" style="margin-top: 20px;">
-                        <h3 style="margin-bottom: 15px;">财运分析</h3>
-                        <p>您的财运与事业发展紧密相连，工作收入是主要财源。今年财运较为稳定，但需注意控制投资风险，避免冲动消费。下半年可能有意外收获。</p>
-                    </div>
-                    
-                    <div style="margin: 30px 0; display: flex; gap: 10px;">
-                        <button class="btn" style="flex: 1;">保存结果</button>
-                        <button class="btn" style="flex: 1;">咨询解惑</button>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                            <div class="transaction-info">
+                                <div class="transaction-title">提现</div>
+                                <div class="transaction-time">2023-07-10 16:20</div>
+                            </div>
+                            <div class="transaction-amount expense">-¥500.00</div>
+                        </div>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-gift"></i>
+                            </div>
+                            <div class="transaction-info">
+                                <div class="transaction-title">活动奖励</div>
+                                <div class="transaction-time">2023-07-05 11:15</div>
+                            </div>
+                            <div class="transaction-amount income">+¥88.88</div>
+                        </div>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="transaction-info">
+                                <div class="transaction-title">充值</div>
+                                <div class="transaction-time">2023-07-01 10:30</div>
+                            </div>
+                            <div class="transaction-amount income">+¥2,000.00</div>
+                        </div>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <div class="transaction-info">
+                                <div class="transaction-title">餐饮消费</div>
+                                <div class="transaction-time">2023-06-28 19:15</div>
+                            </div>
+                            <div class="transaction-amount expense">-¥128.00</div>
+                        </div>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-taxi"></i>
+                            </div>
+                            <div class="transaction-info">
+                                <div class="transaction-title">交通出行</div>
+                                <div class="transaction-time">2023-06-25 08:40</div>
+                            </div>
+                            <div class="transaction-amount expense">-¥45.50</div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="screen-title">交易明细列表</div>
         </div>
         
-        <!-- AI对话咨询页 -->
-        <div class="screen">
-            <div class="screen-title">AI对话咨询</div>
-            <div class="screen-content" style="padding: 0;">
-                <div class="header" style="padding: 10px 15px;">
-                    <div style="display: flex; align-items: center;">
-                        <i class="fas fa-arrow-left" style="margin-right: 15px; font-size: 18px;"></i>
-                        <div>
-                            <div style="font-weight: bold;">命理大师</div>
-                            <div style="font-size: 12px; color: #888;">AI智能解答</div>
-                        </div>
-                    </div>
-                    <i class="fas fa-ellipsis-v" style="font-size: 18px; color: #888;"></i>
-                </div>
-                
-                <div class="chat-container">
-                    <div class="chat-messages">
-                        <div class="message received">
-                            您好，我是您的专属命理顾问。根据您的八字命盘，我可以为您解答各方面的疑惑。请问有什么想了解的吗？
-                        </div>
-                        <div class="message sent">
-                            我想了解一下我今年的事业运势如何？
-                        </div>
-                        <div class="message received">
-                            根据您的八字分析，2024年是您的事业发展的关键年份。上半年可能会面临一些挑战，但这些挑战将成为您成长的机会。6月后，有望获得升职或加薪的机会。
-                            
-                            您的贵人星较为活跃，建议多参加行业交流活动，可能会遇到对您事业有帮助的人。同时，建议在4月和9月多关注新的项目机会，这可能是您展示能力的好时机。
-                        </div>
-                        <div class="message sent">
-                            我最近在考虑换工作，有什么建议吗？
-                        </div>
-                        <div class="message received">
-                            从您的命盘来看，今年确实适合做一些职业调整，但建议在7月之前完成这一转变。
-                            
-                            您的命盘显示适合从事创意类或管理类工作，如果新工作涉及这些领域，将更有利于您的发展。另外，向东南方向发展对您较为有利。
-                            
-                            在做决定前，建议您充分评估新工作的长期发展前景，而不仅仅是短期收益。
-                        </div>
-                    </div>
-                    
-                    <div class="chat-input">
-                        <input type="text" placeholder="输入您的问题...">
-                        <button><i class="fas fa-paper-plane"></i></button>
+        <!-- 交易详情 -->
+        <div>
+            <div class="screen">
+                <div class="status-bar">
+                    <div class="time">9:41</div>
+                    <div class="icons">
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <!-- 个人中心页 -->
-        <div class="screen">
-            <div class="screen-title">个人中心</div>
-            <div class="screen-content">
-                <div style="background: linear-gradient(135deg, #6e45e2, #88d3ce); padding: 30px 20px; border-radius: 0 0 20px 20px; color: white;">
-                    <div style="display: flex; align-items: center;">
-                        <div style="width: 70px; height: 70px; background-color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
-                            <i class="fas fa-user" style="font-size: 30px; color: #6e45e2;"></i>
-                        </div>
-                        <div>
-                            <div style="font-size: 20px; font-weight: bold;">星辰用户</div>
-                            <div style="margin-top: 5px; font-size: 14px;">普通会员</div>
-                        </div>
-                        <div style="margin-left: auto;">
-                            <button style="background-color: rgba(255,255,255,0.2); border: none; color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px;">编辑资料</button>
-                        </div>
-                    </div>
+                <div class="header">
+                    <div class="back-button"><i class="fas fa-chevron-left"></i></div>
+                    <div class="header-title">交易详情</div>
+                    <div></div>
                 </div>
-                
-                <div class="profile-stats">
-                    <div class="stat">
-                        <div class="number">12</div>
-                        <div class="label">解读记录</div>
-                    </div>
-                    <div class="stat">
-                        <div class="number">5</div>
-                        <div class="label">收藏</div>
-                    </div>
-                    <div class="stat">
-                        <div class="number">3</div>
-                        <div class="label">咨询次数</div>
-                    </div>
-                </div>
-                
-                <div class="card" style="margin: 15px;">
-                    <h3 style="margin-bottom: 10px;">我的命盘</h3>
-                    <p style="color: #888; font-size: 14px; margin-bottom: 15px;">查看您的基础命盘信息</p>
-                    <div style="display: flex; justify-content: space-between;">
-                        <div style="text-align: center; background-color: #f8f8f8; padding: 10px; border-radius: 10px; width: 22%;">
-                            <div style="font-weight: bold; color: #6e45e2;">庚午</div>
-                            <div style="font-size: 12px; color: #888; margin-top: 5px;">年柱</div>
-                        </div>
-                        <div style="text-align: center; background-color: #f8f8f8; padding: 10px; border-radius: 10px; width: 22%;">
-                            <div style="font-weight: bold; color: #6e45e2;">丙子</div>
-                            <div style="font-size: 12px; color: #888; margin-top: 5px;">月柱</div>
-                        </div>
-                        <div style="text-align: center; background-color: #f8f8f8; padding: 10px; border-radius: 10px; width: 22%;">
-                            <div style="font-weight: bold; color: #6e45e2;">壬申</div>
-                            <div style="font-size: 12px; color: #888; margin-top: 5px;">日柱</div>
-                        </div>
-                        <div style="text-align: center; background-color: #f8f8f8; padding: 10px; border-radius: 10px; width: 22%;">
-                            <div style="font-weight: bold; color: #6e45e2;">甲午</div>
-                            <div style="font-size: 12px; color: #888; margin-top: 5px;">时柱</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="menu-list">
-                    <div class="menu-item">
-                        <i class="fas fa-history"></i>
-                        <div>解读历史</div>
-                        <i class="fas fa-chevron-right arrow"></i>
-                    </div>
-                    <div class="menu-item">
-                        <i class="fas fa-star"></i>
-                        <div>我的收藏</div>
-                        <i class="fas fa-chevron-right arrow"></i>
-                    </div>
-                    <div class="menu-item">
-                        <i class="fas fa-crown" style="color: #FFD700;"></i>
-                        <div>会员中心</div>
-                        <i class="fas fa-chevron-right arrow"></i>
-                    </div>
-                    <div class="menu-item">
-                        <i class="fas fa-cog"></i>
-                        <div>设置</div>
-                        <i class="fas fa-chevron-right arrow"></i>
-                    </div>
-                    <div class="menu-item">
-                        <i class="fas fa-question-circle"></i>
-                        <div>帮助与反馈</div>
-                        <i class="fas fa-chevron-right arrow"></i>
-                    </div>
-                </div>
-                
-                <div class="tab-bar">
-                    <div class="tab">
-                        <i class="fas fa-home"></i>
-                        <div>首页</div>
-                    </div>
-                    <div class="tab">
-                        <i class="fas fa-compass"></i>
-                        <div>发现</div>
-                    </div>
-                    <div class="tab">
-                        <i class="fas fa-comments"></i>
-                        <div>咨询</div>
-                    </div>
-                    <div class="tab active">
-                        <i class="fas fa-user"></i>
-                        <div>我的</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- 会员订阅页 -->
-        <div class="screen">
-            <div class="screen-title">会员订阅</div>
-            <div class="screen-content">
-                <div style="padding: 15px;">
-                    <div style="text-align: center; margin-bottom: 30px;">
-                        <i class="fas fa-crown" style="font-size: 50px; color: #FFD700; margin-bottom: 15px;"></i>
-                        <h2>星辰VIP会员</h2>
-                        <p style="color: #888; margin-top: 5px;">解锁全部高级功能，获取更深入的命理解读</p>
-                    </div>
-                    
-                    <div class="membership-card">
-                        <h3>月度会员</h3>
-                        <div class="price">¥39.9 <span style="font-size: 14px; font-weight: normal;">/月</span></div>
-                        <div class="features">
-                            <div class="feature">
-                                <i class="fas fa-check-circle"></i>
-                                <span>无限次AI命理咨询</span>
+                <div class="content">
+                    <div class="detail-card">
+                        <div class="detail-header">
+                            <div class="transaction-icon" style="margin: 0 auto 10px;">
+                                <i class="fas fa-arrow-down"></i>
                             </div>
-                            <div class="feature">
-                                <i class="fas fa-check-circle"></i>
-                                <span>解锁全部算命方式</span>
+                            <div class="detail-amount income">+¥1,000.00</div>
+                            <div class="detail-status">交易成功</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">交易类型</div>
+                            <div class="detail-value">充值</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">交易时间</div>
+                            <div class="detail-value">2023-07-15 14:30:25</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">交易渠道</div>
+                            <div class="detail-value">支付宝</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">交易单号</div>
+                            <div class="detail-value">202307151430250001</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">备注</div>
+                            <div class="detail-value">账户充值</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="screen-title">交易详情</div>
+        </div>
+        
+        <!-- 提现操作 -->
+        <div>
+            <div class="screen">
+                <div class="status-bar">
+                    <div class="time">9:41</div>
+                    <div class="icons">
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
+                    </div>
+                </div>
+                <div class="header">
+                    <div class="back-button"><i class="fas fa-chevron-left"></i></div>
+                    <div class="header-title">提现</div>
+                    <div></div>
+                </div>
+                <div class="content">
+                    <div class="withdraw-form">
+                        <div class="form-group">
+                            <label class="form-label">提现金额</label>
+                            <input type="text" class="form-input" placeholder="请输入提现金额" value="500.00">
+                            <div class="form-notice">可提现余额: ¥5,280.75</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">提现到</label>
+                            <div class="bank-select">
+                                <div class="bank-info">
+                                    <div class="bank-logo">
+                                        <i class="fas fa-university"></i>
+                                    </div>
+                                    <div>
+                                        <div class="bank-name">招商银行</div>
+                                        <div class="bank-number">**** **** **** 8888</div>
+                                    </div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">到账时间</label>
+                            <div class="form-notice">预计2小时内到账，具体以银行到账时间为准</div>
+                        </div>
+                        
+                        <button class="primary-button">确认提现</button>
+                    </div>
+                </div>
+            </div>
+            <div class="screen-title">提现操作</div>
+        </div>
+        
+        <!-- 银行卡管理 -->
+        <div>
+            <div class="screen">
+                <div class="status-bar">
+                    <div class="time">9:41</div>
+                    <div class="icons">
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
+                    </div>
+                </div>
+                <div class="header">
+                    <div class="back-button"><i class="fas fa-chevron-left"></i></div>
+                    <div class="header-title">我的银行卡</div>
+                    <div></div>
+                </div>
+                <div class="content">
+                    <div class="bank-card">
+                        <div class="bank-card-logo">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div class="bank-card-name">招商银行</div>
+                        <div class="bank-card-number">**** **** **** 8888</div>
+                        <div class="bank-card-name">张三</div>
+                    </div>
+                    
+                    <div class="bank-card" style="background: linear-gradient(135deg, #FF5722, #FF9800);">
+                        <div class="bank-card-logo">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div class="bank-card-name">中国工商银行</div>
+                        <div class="bank-card-number">**** **** **** 6666</div>
+                        <div class="bank-card-name">张三</div>
+                    </div>
+                    
+                    <div class="add-card-button">
+                        <div class="add-card-icon"><i class="fas fa-plus"></i></div>
+                        <div>添加银行卡</div>
+                    </div>
+                </div>
+            </div>
+            <div class="screen-title">银行卡管理</div>
+        </div>
+        
+        <!-- 添加银行卡 -->
+        <div>
+            <div class="screen">
+                <div class="status-bar">
+                    <div class="time">9:41</div>
+                    <div class="icons">
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
+                    </div>
+                </div>
+                <div class="header">
+                    <div class="back-button"><i class="fas fa-chevron-left"></i></div>
+                    <div class="header-title">添加银行卡</div>
+                    <div></div>
+                </div>
+                <div class="content">
+                    <div class="withdraw-form">
+                        <div class="form-group">
+                            <label class="form-label">持卡人</label>
+                            <input type="text" class="form-input" placeholder="请输入持卡人姓名" value="张三">
+                            <div class="form-notice">请确保与银行预留信息一致</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">卡号</label>
+                            <input type="text" class="form-input" placeholder="请输入银行卡号">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">开户银行</label>
+                            <div class="bank-select">
+                                <div class="bank-info">
+                                    <div class="bank-logo">
+                                        <i class="fas fa-university"></i>
+                                    </div>
+                                    <div>
+                                        <div class="bank-name">请选择银行</div>
+                                    </div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">手机号</label>
+                            <input type="text" class="form-input" placeholder="请输入银行预留手机号">
+                            <div class="form-notice">请确保与银行预留信息一致</div>
+                        </div>
+                        
+                        <button class="primary-button">确认添加</button>
+                    </div>
+                </div>
+            </div>
+            <div class="screen-title">添加银行卡</div>
+        </div>
+        
+        <!-- 提现记录 -->
+        <div>
+            <div class="screen">
+                <div class="status-bar">
+                    <div class="time">9:41</div>
+                    <div class="icons">
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
+                    </div>
+                </div>
+                <div class="header">
+                    <div class="back-button"><i class="fas fa-chevron-left"></i></div>
+                    <div class="header-title">提现记录</div>
+                    <div></div>
+                </div>
+                <div class="content">
+                    <div class="transaction-list">
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                            <div class="transaction-info">
+                                <div class="transaction-title">提现到招商银行(8888)</div>
+                                <div class="transaction-time">2023-07-10 16:20</div>
+                            </div>
+                            <div class="transaction-amount expense">-¥500.00</div>
+                        </div>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                            <div class="transaction-info">
+                                <div class="transaction-title">提现到工商银行(6666)</div>
+                                <div class="transaction-time">2023-06-20 14:30</div>
+                            </div>
+                            <div class="transaction-amount expense">-¥1,000.00</div>
+                        </div>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                            <div class="transaction-info">
+                                <div class="transaction-title">提现到招商银行(8888)</div>
+                                <div class="transaction-time">2023-05-15 10:45</div>
+                            </div>
+                            <div class="transaction-amount expense">-¥800.00</div>
+                        </div>
+                        
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                            <div class="transaction-info">
+                                <div class="transaction-title">提现到工商银行(6666)</div>
+                                <div class="transaction-time">2023-04-28 09:15</div>
+                            </div>
+                            <div class="transaction-amount expense">-¥1,500.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="screen-title">提现记录</div>
+        </div>
+        
+        <!-- 提现详情 -->
+        <div>
+            <div class="screen">
+                <div class="status-bar">
+                    <div class="time">9:41</div>
+                    <div class="icons">
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
+                    </div>
+                </div>
+                <div class="header">
+                    <div class="back-button"><i class="fas fa-chevron-left"></i></div>
+                    <div class="header-title">提现详情</div>
+                    <div></div>
+                </div>
+                <div class="content">
+                    <div class="detail-card">
+                        <div class="detail-header">
+                            <div class="transaction-icon" style="margin: 0 auto 10px;">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                            <div class="detail-amount expense">-¥500.00</div>
+                            <div class="detail-status">提现成功</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">提现银行</div>
+                            <div class="detail-value">招商银行(8888)</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">提现时间</div>
+                            <div class="detail-value">2023-07-10 16:20:35</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">到账时间</div>
+                            <div class="detail-value">2023-07-10 17:45:12</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">手续费</div>
+                            <div class="detail-value">¥0.00</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">交易单号</div>
+                            <div class="detail-value">202307101620350001</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">备注</div>
+                            <div class="detail-value">提现到银行卡</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="screen-title">提现详情</div>
+        </div>
+        
+        <!-- 提现成功 -->
+        <div>
+            <div class="screen">
+                <div class="status-bar">
+                    <div class="time">9:41</div>
+                    <div class="icons">
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
+                    </div>
+                </div>
+                <div class="header">
+                    <div class="back-button"><i class="fas fa-chevron-left"></i></div>
+                    <div class="header-title">提现结果</div>
+                    <div></div>
+                </div>
+                <div class="content">
+                    <div class="result-page">
+                        <div class="result-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="result-title">提现申请已提交</div>
+                        <div class="result-message">
+                            您的提现申请已成功提交，预计2小时内到账，<br>
+                            具体以银行到账时间为准。
+                        </div>
+                        <div class="detail-card" style="width: 100%;">
+                            <div class="detail-row">
+                                <div class="detail-label">提现金额</div>
+                                <div class="detail-value">¥500.00</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">提现银行</div>
+                                <div class="detail-value">招商银行(8888)</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">申请时间</div>
+                                <div class="detail-value">2023-07-20 10:30:15</div>
+                            </div>
+                        </div>
+                        <button class="primary-button">完成</button>
+                    </div>
+                </div>
+            </div>
+            <div class="screen-title">提现成功</div>
+        </div>
+    </div>
+</body>
+</html>
