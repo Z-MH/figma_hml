@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>历史记录 - AI陪聊产品</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #6c5ce7;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ddd;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #666;
+        }
+        
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .search-filter {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .search-bar {
+            flex: 1;
+            min-width: 250px;
+            max-width: 500px;
+            display: flex;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-right: none;
+            border-radius: 8px 0 0 8px;
+            font-size: 0.95rem;
+        }
+        
+        .search-bar input:focus {
+            outline: none;
+            border-color: #6c5ce7;
+        }
+        
+        .search-bar button {
+            padding: 0 20px;
+            background-color: #6c5ce7;
+            color: white;
+            border: none;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+        }
+        
+        .filter-controls {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .filter-select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
+            font-size: 0.95rem;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: #6c5ce7;
+        }
+        
+        .conversation-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .conversation-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .conversation-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .conversation-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .conversation-character {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .character-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .astronaut-avatar {
+            background-color: #6c5ce7;
+        }
+        
+        .scholar-avatar {
+            background-color: #74b9ff;
+        }
+        
+        .heart-avatar {
+            background-color: #ff7675;
+        }
+        
+        .chef-avatar {
+            background-color: #ffeaa7;
+            color: #666;
+        }
+        
+        .character-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #333;
+        }
+        
+        .conversation-date {
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        .conversation-content {
+            padding: 15px 20px;
+        }
+        
+        .conversation-preview {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: #666;
+        }
+        
+        .preview-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+        
+        .preview-text {
+            flex: 1;
+            font-size: 0.95rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .conversation-stats {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #f0f0f0;
+            padding: 12px 20px;
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .conversation-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #666;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        
+        .action-icon:hover {
+            background-color: #6c5ce7;
+            color: white;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 30px;
+        }
+        
+        .pagination-item {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-item.active {
+            background-color: #6c5ce7;
+            color: white;
+        }
+        
+        .pagination-item:hover:not(.active) {
+            background-color: #f0f0f0;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .empty-icon {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .empty-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .empty-message {
+            color: #999;
+            margin-bottom: 20px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .start-btn {
+            display: inline-block;
+            background-color: #6c5ce7;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        .start-btn:hover {
+            background-color: #5649c0;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        .section-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .tab-item {
+            padding: 12px 20px;
+            font-weight: bold;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab-item.active {
+            color: #6c5ce7;
+            border-bottom-color: #6c5ce7;
+        }
+        
+        .tab-item:hover:not(.active) {
+            color: #999;
+            border-bottom-color: #eee;
+        }
+        
+        /* 清除搜索按钮 */
+        .clear-search {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 1.2rem;
+            position: absolute;
+            right: 70px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: none;
+        }
+        
+        .search-bar:focus-within .clear-search {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="logo">
+                <i class="fas fa-robot"></i>
+                <span>AI陪聊</span>
+            </a>
+            
+            <div class="user-info">
+                <a href="profile.html" class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </a>
+            </div>
+        </div>
+        
+        <h1 class="page-title">历史记录</h1>
+        
+        <div class="section-tabs">
+            <div class="tab-item active">所有对话</div>
+            <div class="tab-item">已收藏</div>
+            <div class="tab-item">已分享</div>
+        </div>
+        
+        <div class="search-filter">
+            <div class="search-bar">
+                <input type="text" placeholder="搜索对话关键词...">
+                <button class="clear-search"><i class="fas fa-times"></i></button>
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            
+            <div class="filter-controls">
+                <select class="filter-select">
+                    <option value="">所有角色</option>
+                    <option value="astronaut">星际旅行家</option>
+                    <option value="scholar">古代学者</option>
+                    <option value="companion">心灵伙伴</option>
+                    <option value="chef">星级厨师</option>
+                </select>
+                
+                <select class="filter-select">
+                    <option value="recent">最近对话</option>
+                    <option value="oldest">最早对话</option>
+                    <option value="longest">最长对话</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="conversation-list">
+            <div class="conversation-card" onclick="window.location.href='chat-dialog.html'">
+                <div class="conversation-header">
+                    <div class="conversation-character">
+                        <div class="character-avatar astronaut-avatar">
+                            <i class="fas fa-user-astronaut"></i>
+                        </div>
+                        <div class="character-name">星际旅行家</div>
+                    </div>
+                    <div class="conversation-date">今天 14:32</div>
+                </div>
+                <div class="conversation-content">
+                    <div class="conversation-preview">
+                        <div class="preview-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="preview-text">太神奇了！你的飞船是怎么工作的？能突破光速吗？</div>
+                    </div>
+                    <div class="conversation-preview">
+                        <div class="preview-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="preview-text">好问题！我的飞船确实可以突破光速，它利用了空间折叠技术，这是一种利用宇宙弦振动创造虫洞的方法。简单来说，我的飞船不是通过空间中移动来旅行，而是弯曲空间本身...</div>
+                    </div>
+                </div>
+                <div class="conversation-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-comment"></i>
+                        <span>12条消息</span>
+                    </div>
+                    <div class="conversation-actions">
+                        <div class="action-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="action-icon">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <div class="action-icon">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="conversation-card" onclick="window.location.href='chat-dialog.html'">
+                <div class="conversation-header">
+                    <div class="conversation-character">
+                        <div class="character-avatar scholar-avatar">
+                            <i class="fas fa-book-reader"></i>
+                        </div>
+                        <div class="character-name">古代学者</div>
+                    </div>
+                    <div class="conversation-date">昨天 19:45</div>
+                </div>
+                <div class="conversation-content">
+                    <div class="conversation-preview">
+                        <div class="preview-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="preview-text">你认为古希腊哲学对现代社会有哪些影响？</div>
+                    </div>
+                    <div class="conversation-preview">
+                        <div class="preview-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="preview-text">古希腊哲学对现代社会的影响深远而广泛。首先，苏格拉底、柏拉图和亚里士多德奠定的逻辑思维和理性探究方法，构成了现代科学研究的基础。其次，他们关于民主、正义和伦理的讨论塑造了现代政治和法律制度...</div>
+                    </div>
+                </div>
+                <div class="conversation-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-comment"></i>
+                        <span>23条消息</span>
+                    </div>
+                    <div class="conversation-actions">
+                        <div class="action-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="action-icon">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <div class="action-icon">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="conversation-card" onclick="window.location.href='chat-dialog.html'">
+                <div class="conversation-header">
+                    <div class="conversation-character">
+                        <div class="character-avatar heart-avatar">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="character-name">心灵伙伴</div>
+                    </div>
+                    <div class="conversation-date">3天前</div>
+                </div>
+                <div class="conversation-content">
+                    <div class="conversation-preview">
+                        <div class="preview-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="preview-text">今天工作压力很大，感觉很疲惫。</div>
+                    </div>
+                    <div class="conversation-preview">
+                        <div class="preview-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="preview-text">我能理解这种感受。工作压力确实会让人身心俱疲。记得给自己一些喘息的空间，哪怕只是短暂的片刻。也许你可以试试深呼吸练习，或者放一首你喜欢的音乐？有时候，小小的放松时刻就能带来很大的变化...</div>
+                    </div>
+                </div>
+                <div class="conversation-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-comment"></i>
+                        <span>31条消息</span>
+                    </div>
+                    <div class="conversation-actions">
+                        <div class="action-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="action-icon">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <div class="action-icon">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="conversation-card" onclick="window.location.href='chat-dialog.html'">
+                <div class="conversation-header">
+                    <div class="conversation-character">
+                        <div class="character-avatar chef-avatar">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div class="character-name">星级厨师</div>
+                    </div>
+                    <div class="conversation-date">上周</div>
+                </div>
+                <div class="conversation-content">
+                    <div class="conversation-preview">
+                        <div class="preview-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="preview-text">我有一些蔬菜和鸡肉，有什么简单又美味的食谱推荐吗？</div>
+                    </div>
+                    <div class="conversation-preview">
+                        <div class="preview-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="preview-text">我有一道完美的建议：蔬菜鸡肉炒饭！这道菜快速简单，又能充分利用你手头的食材。首先，将鸡肉切成小块，用盐、胡椒和一点酱油腌制10分钟。然后热锅加油，先炒鸡肉至金黄，取出备用...</div>
+                    </div>
+                </div>
+                <div class="conversation-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-comment"></i>
+                        <span>18条消息</span>
+                    </div>
+                    <div class="conversation-actions">
+                        <div class="action-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="action-icon">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <div class="action-icon">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 空状态示例，默认隐藏 -->
+        <div class="empty-state" style="display: none;">
+            <div class="empty-icon">
+                <i class="fas fa-comment-slash"></i>
+            </div>
+            <div class="empty-title">暂无对话记录</div>
+            <div class="empty-message">
+                你还没有与任何AI角色进行对话，开始一场新的对话，探索AI互动的乐趣吧！
+            </div>
+            <a href="character-select.html" class="start-btn">
+                <i class="fas fa-plus"></i>
+                开始对话
+            </a>
+        </div>
+        
+        <div class="pagination">
+            <div class="pagination-item"><i class="fas fa-chevron-left"></i></div>
+            <div class="pagination-item active">1</div>
+            <div class="pagination-item">2</div>
+            <div class="pagination-item">3</div>
+            <div class="pagination-item"><i class="fas fa-chevron-right"></i></div>
+        </div>
+        
+        <div class="footer">
+            Copyright © 2023 AI陪聊. All rights reserved.
+        </div>
+    </div>
+</body>
+</html> 

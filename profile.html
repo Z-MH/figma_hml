@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - AI陪聊产品</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #6c5ce7;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .page-content {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .sidebar {
+            width: 250px;
+            flex-shrink: 0;
+        }
+        
+        .main-content {
+            flex: 1;
+        }
+        
+        .profile-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            background-color: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: #999;
+            position: relative;
+        }
+        
+        .edit-avatar {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #6c5ce7;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        
+        .profile-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .profile-email {
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #6c5ce7;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        .menu-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            color: #666;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .menu-item.active {
+            background-color: #6c5ce7;
+            color: white;
+        }
+        
+        .menu-item:hover:not(.active) {
+            background-color: #f0f0f0;
+        }
+        
+        .menu-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .section-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #666;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #6c5ce7;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .primary-btn {
+            background-color: #6c5ce7;
+            color: white;
+        }
+        
+        .primary-btn:hover {
+            background-color: #5649c0;
+        }
+        
+        .secondary-btn {
+            background-color: #f0f0f0;
+            color: #666;
+        }
+        
+        .secondary-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .switch-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .switch-label {
+            font-weight: 500;
+            color: #666;
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #6c5ce7;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .subscription-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .subscription-card.active {
+            border-color: #6c5ce7;
+            box-shadow: 0 3px 10px rgba(108, 92, 231, 0.1);
+        }
+        
+        .subscription-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .subscription-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #333;
+        }
+        
+        .subscription-price {
+            font-weight: bold;
+            color: #6c5ce7;
+        }
+        
+        .subscription-price span {
+            font-size: 0.8rem;
+            color: #999;
+            font-weight: normal;
+        }
+        
+        .subscription-features {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .feature-item i {
+            color: #6c5ce7;
+            margin-top: 4px;
+        }
+        
+        .current-plan {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #6c5ce7;
+            color: white;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 20px;
+        }
+        
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .data-row:last-child {
+            border-bottom: none;
+        }
+        
+        .data-label {
+            color: #666;
+        }
+        
+        .data-value {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .usage-bar {
+            height: 8px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .usage-progress {
+            height: 100%;
+            background-color: #6c5ce7;
+            border-radius: 4px;
+        }
+        
+        .delete-account {
+            color: #ff6b6b;
+            text-align: center;
+            padding: 15px;
+            border: 1px dashed #ff6b6b;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .delete-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .delete-description {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .delete-btn {
+            background-color: #fff;
+            color: #ff6b6b;
+            border: 1px solid #ff6b6b;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .delete-btn:hover {
+            background-color: #ff6b6b;
+            color: #fff;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        @media (max-width: 768px) {
+            .page-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="logo">
+                <i class="fas fa-robot"></i>
+                <span>AI陪聊</span>
+            </a>
+        </div>
+        
+        <div class="page-content">
+            <div class="sidebar">
+                <div class="profile-card">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user"></i>
+                        <div class="edit-avatar">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                    <div class="profile-name">张三</div>
+                    <div class="profile-email">zhangsan@example.com</div>
+                    
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">42</div>
+                            <div class="stat-label">对话</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">收藏</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">创建</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-card">
+                    <div class="menu-item active">
+                        <div class="menu-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="menu-label">个人资料</div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="menu-label">账户设置</div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="menu-label">会员订阅</div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="menu-label">使用统计</div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="menu-label">我的收藏</div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="menu-label">我的角色</div>
+                    </div>
+                    
+                    <div class="menu-item">
+                        <div class="menu-icon">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </div>
+                        <div class="menu-label">退出登录</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <!-- 个人资料部分 -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-title">个人资料</div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first-name">姓名</label>
+                            <input type="text" id="first-name" value="张三">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="username">用户名</label>
+                            <input type="text" id="username" value="zhang_san123">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">邮箱</label>
+                        <input type="email" id="email" value="zhangsan@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">手机号码</label>
+                        <input type="tel" id="phone" value="138****5678">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bio">个人简介</label>
+                        <textarea id="bio" rows="4" placeholder="写一些关于你自己的介绍..."></textarea>
+                    </div>
+                    
+                    <button class="btn primary-btn">保存更改</button>
+                </div>
+                
+                <!-- 账户设置部分 -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-title">账户设置</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="language">语言偏好</label>
+                        <select id="language">
+                            <option value="zh">中文</option>
+                            <option value="en">English</option>
+                            <option value="ja">日本語</option>
+                            <option value="ko">한국어</option>
+                        </select>
+                    </div>
+                    
+                    <div class="switch-container">
+                        <div class="switch-label">启用消息通知</div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="switch-container">
+                        <div class="switch-label">记住对话历史</div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="switch-container">
+                        <div class="switch-label">允许使用数据改进服务</div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">更改密码</label>
+                        <input type="password" id="password" placeholder="输入新密码">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm-password">确认新密码</label>
+                        <input type="password" id="confirm-password" placeholder="再次输入新密码">
+                    </div>
+                    
+                    <button class="btn primary-btn">保存设置</button>
+                    
+                    <div class="delete-account">
+                        <div class="delete-title">删除账户</div>
+                        <div class="delete-description">
+                            账户删除后，所有数据将被永久移除，且无法恢复。请谨慎操作。
+                        </div>
+                        <button class="delete-btn">删除我的账户</button>
+                    </div>
+                </div>
+                
+                <!-- 会员订阅部分 -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-title">会员订阅</div>
+                    </div>
+                    
+                    <div class="subscription-card">
+                        <div class="subscription-header">
+                            <div class="subscription-name">免费会员</div>
+                            <div class="subscription-price">¥0 <span>/月</span></div>
+                        </div>
+                        <div class="subscription-features">
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <div>每日对话限额：20条</div>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <div>预设角色：5个</div>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <div>基础对话体验</div>
+                            </div>
+                        </div>
+                        <div class="current-plan">当前方案</div>
+                    </div>
+                    
+                    <div class="subscription-card">
+                        <div class="subscription-header">
+                            <div class="subscription-name">高级会员</div>
+                            <div class="subscription-price">¥28 <span>/月</span></div>
+                        </div>
+                        <div class="subscription-features">
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <div>每日对话不限量</div>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <div>所有预设角色</div>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <div>创建自定义角色：3个</div>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <div>高级对话体验与优先响应</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="subscription-card">
+                        <div class="subscription-header">
+                            <div class="subscription-name">专业会员</div>
+                            <div class="subscription-price">¥68 <span>/月</span></div>
+                        </div>
+                        <div class="subscription-features">
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <div>每日对话不限量</div>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <div>所有预设角色</div>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <div>创建自定义角色：无限</div>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <div>高级语音交互与角色定制</div>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <div>专属客服支持</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn primary-btn">升级会员</button>
+                </div>
+                
+                <!-- 使用统计部分 -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-title">使用统计</div>
+                    </div>
+                    
+                    <div class="data-row">
+                        <div class="data-label">今日对话次数</div>
+                        <div class="data-value">12/20</div>
+                    </div>
+                    <div class="usage-bar">
+                        <div class="usage-progress" style="width: 60%;"></div>
+                    </div>
+                    
+                    <div class="data-row">
+                        <div class="data-label">本月累计对话</div>
+                        <div class="data-value">175次</div>
+                    </div>
+                    
+                    <div class="data-row">
+                        <div class="data-label">平均每日对话</div>
+                        <div class="data-value">8.3次</div>
+                    </div>
+                    
+                    <div class="data-row">
+                        <div class="data-label">最常用角色</div>
+                        <div class="data-value">心灵伙伴（42%）</div>
+                    </div>
+                    
+                    <div class="data-row">
+                        <div class="data-label">注册时间</div>
+                        <div class="data-value">2023年5月15日</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Copyright © 2023 AI陪聊. All rights reserved.
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>角色详情 - AI陪聊产品</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding-bottom: 70px; /* 为底部导航留出空间 */
+        }
+        
+        /* 移动端优化：全屏设计 */
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        /* 头部区域 - 固定顶部 */
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            z-index: 100;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-btn {
+            color: #6c5ce7;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            color: #666;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover, .action-btn.active {
+            background-color: #6c5ce7;
+            color: white;
+        }
+        
+        /* 角色封面 */
+        .character-cover {
+            width: 100%;
+            height: 40vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+        }
+        
+        .character-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: white;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: #6c5ce7;
+            z-index: 10;
+        }
+        
+        .cover-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 15px;
+            background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+            color: white;
+        }
+        
+        .character-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .character-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        /* 标签和状态 */
+        .tag-container {
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .character-tag {
+            padding: 5px 12px;
+            background-color: #f0f0f0;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .character-tag.primary {
+            background-color: #6c5ce7;
+            color: white;
+        }
+        
+        .popularity {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: auto;
+            color: #e74c3c;
+            font-size: 0.9rem;
+        }
+        
+        /* 主要内容区 */
+        .main-content {
+            padding: 15px;
+        }
+        
+        .content-section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-title i {
+            color: #6c5ce7;
+        }
+        
+        .about-text {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        /* 角色特性 */
+        .character-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .feature-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #6c5ce7;
+        }
+        
+        .feature-details h4 {
+            font-size: 0.95rem;
+            margin-bottom: 3px;
+        }
+        
+        .feature-details p {
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        /* 对话示例 */
+        .dialog-examples {
+            background-color: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .dialog-title {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .view-all {
+            font-size: 0.8rem;
+            color: #6c5ce7;
+            text-decoration: none;
+        }
+        
+        .dialog-item {
+            display: flex;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        
+        .dialog-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .dialog-avatar.character {
+            background-color: #6c5ce7;
+            color: white;
+        }
+        
+        .dialog-avatar.user {
+            background-color: #f0f0f0;
+            color: #666;
+        }
+        
+        .dialog-bubble {
+            background-color: #f5f7fa;
+            border-radius: 15px;
+            padding: 12px 15px;
+            font-size: 0.9rem;
+            max-width: 80%;
+            position: relative;
+        }
+        
+        .dialog-bubble.character {
+            background-color: #6c5ce7;
+            color: white;
+        }
+        
+        /* 直播式对话演示 */
+        .livestream-demo {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .livestream-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .livestream-title {
+            font-weight: bold;
+            color: #e74c3c;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .live-badge {
+            background-color: #e74c3c;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        .viewer-count {
+            font-size: 0.8rem;
+            color: #999;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .livestream-content {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+        
+        .stream-message {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .message-sender {
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+        
+        .message-text {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .message-sender.host {
+            color: #e74c3c;
+        }
+        
+        .message-sender.user {
+            color: #3498db;
+        }
+        
+        .message-sender.gift {
+            color: #f39c12;
+        }
+        
+        .gift-animation {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-radius: 10px;
+            padding: 8px;
+            text-align: center;
+            margin: 10px 0;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 推荐相似角色 */
+        .similar-characters {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 5px 0;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .similar-card {
+            min-width: 120px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            overflow: hidden;
+            scroll-snap-align: start;
+        }
+        
+        .similar-avatar {
+            height: 100px;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            color: #6c5ce7;
+        }
+        
+        .similar-info {
+            padding: 10px;
+        }
+        
+        .similar-name {
+            font-size: 0.9rem;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .similar-type {
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        /* 底部操作栏 */
+        .bottom-actions {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        .customize-btn {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #6c5ce7;
+            background-color: white;
+            color: #6c5ce7;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .start-chat-btn {
+            flex: 1;
+            padding: 12px;
+            background-color: #6c5ce7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="character-select.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>返回</span>
+            </a>
+            
+            <div class="header-actions">
+                <button class="action-btn">
+                    <i class="fas fa-share-alt"></i>
+                </button>
+                <button class="action-btn">
+                    <i class="fas fa-star"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="character-cover">
+            <div class="character-avatar">
+                <i class="fas fa-microphone-alt"></i>
+            </div>
+            
+            <div class="cover-overlay">
+                <div class="character-name">夜语主播</div>
+                <div class="character-subtitle">专业电台主播，温柔声线，陪你度过每个夜晚</div>
+            </div>
+        </div>
+        
+        <div class="tag-container">
+            <div class="character-tag primary">直播主播</div>
+            <div class="character-tag">陪伴</div>
+            <div class="character-tag">情感</div>
+            <div class="character-tag">声音</div>
+            
+            <div class="popularity">
+                <i class="fas fa-fire"></i>
+                <span>97.5% 好评</span>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="content-section">
+                <h3 class="section-title">
+                    <i class="fas fa-user"></i>
+                    角色介绍
+                </h3>
+                <p class="about-text">
+                    夜语是一位资深电台主播，拥有温暖治愈的声线和丰富的直播经验。她擅长与听众互动，能够营造出亲密温馨的氛围，让你感到被理解与陪伴。无论是深夜倾诉还是休闲闲聊，她都能成为你最好的交流伙伴。她喜欢音乐、阅读和旅行，有着丰富的生活经验可以分享。
+                </p>
+            </div>
+            
+            <div class="content-section">
+                <h3 class="section-title">
+                    <i class="fas fa-star"></i>
+                    角色特性
+                </h3>
+                <div class="character-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <div class="feature-details">
+                            <h4>专业播音</h4>
+                            <p>温柔声线</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-headphones"></i>
+                        </div>
+                        <div class="feature-details">
+                            <h4>互动式交流</h4>
+                            <p>像真人一样对话</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="feature-details">
+                            <h4>情绪支持</h4>
+                            <p>理解并共情</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-comment-dots"></i>
+                        </div>
+                        <div class="feature-details">
+                            <h4>话题广泛</h4>
+                            <p>生活分享与建议</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-section">
+                <h3 class="section-title">
+                    <i class="fas fa-comment-alt"></i>
+                    对话示例
+                </h3>
+                <div class="dialog-examples">
+                    <div class="dialog-title">
+                        <span>部分对话展示</span>
+                        <a href="#" class="view-all">查看更多</a>
+                    </div>
+                    
+                    <div class="dialog-item">
+                        <div class="dialog-avatar character">
+                            <i class="fas fa-microphone-alt"></i>
+                        </div>
+                        <div class="dialog-bubble character">
+                            嗨，欢迎来到夜语直播间！今晚有什么想和我分享的吗？
+                        </div>
+                    </div>
+                    
+                    <div class="dialog-item" style="justify-content: flex-end;">
+                        <div class="dialog-bubble">
+                            今天工作好累啊，感觉压力好大
+                        </div>
+                        <div class="dialog-avatar user">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="dialog-item">
+                        <div class="dialog-avatar character">
+                            <i class="fas fa-microphone-alt"></i>
+                        </div>
+                        <div class="dialog-bubble character">
+                            啊，听起来你今天过得不太顺利呢。工作压力确实会让人感到疲惫，我能理解这种感受。想详细说说发生了什么吗？或者，你更想听点轻松的音乐放松一下？
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 直播式对话演示 -->
+            <div class="livestream-demo">
+                <div class="livestream-header">
+                    <div class="livestream-title">
+                        <i class="fas fa-broadcast-tower"></i>
+                        直播间实况
+                        <span class="live-badge">LIVE</span>
+                    </div>
+                    <div class="viewer-count">
+                        <i class="fas fa-eye"></i>
+                        2,547 人观看
+                    </div>
+                </div>
+                
+                <div class="livestream-content">
+                    <div class="stream-message">
+                        <div class="message-sender host">夜语:</div>
+                        <div class="message-text">大家晚上好~今天有什么想和我分享的心情或故事吗？</div>
+                    </div>
+                    
+                    <div class="stream-message">
+                        <div class="message-sender user">星辰闪烁:</div>
+                        <div class="message-text">夜语姐好！今天下雨了，感觉很适合听你的声音</div>
+                    </div>
+                    
+                    <div class="stream-message">
+                        <div class="message-sender host">夜语:</div>
+                        <div class="message-text">雨天确实很适合安静地听音乐和闲聊呢。窗外的雨声配上轻柔的音乐，是不是特别治愈？星辰今天心情怎么样？</div>
+                    </div>
+                    
+                    <div class="gift-animation">
+                        <span class="message-sender gift">梦幻旅人</span> 赠送了 <b>星光熠熠</b> x3
+                    </div>
+                    
+                    <div class="stream-message">
+                        <div class="message-sender host">夜语:</div>
+                        <div class="message-text">谢谢梦幻旅人的星光熠熠！你们的支持是我直播的动力~</div>
+                    </div>
+                    
+                    <div class="stream-message">
+                        <div class="message-sender user">孤独行者99:</div>
+                        <div class="message-text">夜语，最近总是失眠，有什么好方法吗？</div>
+                    </div>
+                    
+                    <div class="stream-message">
+                        <div class="message-sender host">夜语:</div>
+                        <div class="message-text">失眠确实很困扰呢。我建议可以尝试睡前1小时关闭电子设备，听些轻柔的白噪音，或者做10分钟的冥想。我可以为你朗读一段舒缓的文字帮助入睡，要听吗？</div>
+                    </div>
+                    
+                    <div class="stream-message">
+                        <div class="message-sender user">花开一瞬:</div>
+                        <div class="message-text">夜语今天的声音特别好听！能推荐一首你最近喜欢的歌吗？</div>
+                    </div>
+                    
+                    <div class="stream-message">
+                        <div class="message-sender host">夜语:</div>
+                        <div class="message-text">谢谢夸奖，花开一瞬！最近我很喜欢《月光温柔》这首歌，旋律温柔，歌词写的是关于思念和期待的故事，听完特别有共鸣。有机会可以听听看~</div>
+                    </div>
+                    
+                    <div class="stream-message">
+                        <div class="message-sender user">雨巷漫步:</div>
+                        <div class="message-text">夜语姐，我和女朋友吵架了，她不理我了，好难过</div>
+                    </div>
+                    
+                    <div class="stream-message">
+                        <div class="message-sender host">夜语:</div>
+                        <div class="message-text">啊，感情上的波折确实会让人难过。先给自己和对方一些冷静的时间，然后真诚地沟通很重要。试着理解对方的感受，表达你的歉意和改变的决心。如果方便的话，可以私信我具体情况，也许我能给你一些建议？</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-section">
+                <h3 class="section-title">
+                    <i class="fas fa-users"></i>
+                    相似角色推荐
+                </h3>
+                <div class="similar-characters">
+                    <div class="similar-card">
+                        <div class="similar-avatar" style="background-color: #ff7675;">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="similar-info">
+                            <div class="similar-name">心灵伙伴</div>
+                            <div class="similar-type">情感陪伴</div>
+                        </div>
+                    </div>
+                    
+                    <div class="similar-card">
+                        <div class="similar-avatar" style="background-color: #74b9ff;">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="similar-info">
+                            <div class="similar-name">音乐达人</div>
+                            <div class="similar-type">音乐分享</div>
+                        </div>
+                    </div>
+                    
+                    <div class="similar-card">
+                        <div class="similar-avatar" style="background-color: #a29bfe;">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="similar-info">
+                            <div class="similar-name">故事讲述者</div>
+                            <div class="similar-type">文学阅读</div>
+                        </div>
+                    </div>
+                    
+                    <div class="similar-card">
+                        <div class="similar-avatar" style="background-color: #55efc4;">
+                            <i class="fas fa-laugh"></i>
+                        </div>
+                        <div class="similar-info">
+                            <div class="similar-name">幽默搞笑王</div>
+                            <div class="similar-type">轻松娱乐</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bottom-actions">
+        <button class="customize-btn">定制角色</button>
+        <button class="start-chat-btn" onclick="window.location.href='game-dialog.html'">开始对话</button>
+    </div>
+</body>
+</html> 

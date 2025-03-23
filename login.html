@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录/注册 - AI陪聊产品</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        .login-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .login-header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .tab-control {
+            display: flex;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            background: #f9f9f9;
+            cursor: pointer;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn.active {
+            background: white;
+            color: #6c5ce7;
+            box-shadow: 0 2px 0 #6c5ce7;
+        }
+        
+        .login-form {
+            padding: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            padding-left: 40px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            border-color: #6c5ce7;
+            outline: none;
+        }
+        
+        .form-group i {
+            position: absolute;
+            left: 15px;
+            top: 38px;
+            color: #999;
+        }
+        
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        
+        .forgot-password a {
+            color: #6c5ce7;
+            font-size: 0.85rem;
+            text-decoration: none;
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background: #5649c0;
+        }
+        
+        .social-login {
+            margin-top: 25px;
+            text-align: center;
+        }
+        
+        .social-login p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .social-login p::before,
+        .social-login p::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            height: 1px;
+            background-color: #ddd;
+            width: 30%;
+        }
+        
+        .social-login p::before {
+            left: 0;
+        }
+        
+        .social-login p::after {
+            right: 0;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f1f1f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .social-icon i {
+            font-size: 1.2rem;
+        }
+        
+        .social-icon.wechat i {
+            color: #07C160;
+        }
+        
+        .social-icon.qq i {
+            color: #12B7F5;
+        }
+        
+        .social-icon.weibo i {
+            color: #E6162D;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* 注册表单暂时隐藏 */
+        #register-form {
+            display: none;
+        }
+        
+        /* 版权信息 */
+        .copyright {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> 返回首页</a>
+    
+    <div class="login-container">
+        <div class="login-header">
+            <h1>欢迎回来</h1>
+            <p>登录后开始您的AI陪聊之旅</p>
+        </div>
+        
+        <div class="tab-control">
+            <div class="tab-btn active" id="login-tab">登录</div>
+            <div class="tab-btn" id="register-tab">注册</div>
+        </div>
+        
+        <div class="login-form" id="login-form">
+            <div class="form-group">
+                <label for="login-username">用户名</label>
+                <i class="fas fa-user"></i>
+                <input type="text" id="login-username" placeholder="请输入用户名">
+            </div>
+            
+            <div class="form-group">
+                <label for="login-password">密码</label>
+                <i class="fas fa-lock"></i>
+                <input type="password" id="login-password" placeholder="请输入密码">
+            </div>
+            
+            <div class="forgot-password">
+                <a href="#">忘记密码?</a>
+            </div>
+            
+            <button class="submit-btn" onclick="window.location.href='character-select.html'">登录</button>
+            
+            <div class="social-login">
+                <p>第三方账号登录</p>
+                <div class="social-icons">
+                    <div class="social-icon wechat">
+                        <i class="fab fa-weixin"></i>
+                    </div>
+                    <div class="social-icon qq">
+                        <i class="fab fa-qq"></i>
+                    </div>
+                    <div class="social-icon weibo">
+                        <i class="fab fa-weibo"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="login-form" id="register-form">
+            <div class="form-group">
+                <label for="register-username">用户名</label>
+                <i class="fas fa-user"></i>
+                <input type="text" id="register-username" placeholder="请设置用户名">
+            </div>
+            
+            <div class="form-group">
+                <label for="register-email">邮箱</label>
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="register-email" placeholder="请输入邮箱">
+            </div>
+            
+            <div class="form-group">
+                <label for="register-password">密码</label>
+                <i class="fas fa-lock"></i>
+                <input type="password" id="register-password" placeholder="请设置密码">
+            </div>
+            
+            <div class="form-group">
+                <label for="register-confirm">确认密码</label>
+                <i class="fas fa-check-circle"></i>
+                <input type="password" id="register-confirm" placeholder="请再次输入密码">
+            </div>
+            
+            <button class="submit-btn" onclick="window.location.href='character-select.html'">注册</button>
+        </div>
+        
+        <div class="copyright">
+            Copyright © 2023 AI陪聊. All rights reserved.
+        </div>
+    </div>
+    
+    <script>
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        
+        loginTab.addEventListener('click', function() {
+            loginTab.classList.add('active');
+            registerTab.classList.remove('active');
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+        });
+        
+        registerTab.addEventListener('click', function() {
+            registerTab.classList.add('active');
+            loginTab.classList.remove('active');
+            registerForm.style.display = 'block';
+            loginForm.style.display = 'none';
+        });
+    </script>
+</body>
+</html> 

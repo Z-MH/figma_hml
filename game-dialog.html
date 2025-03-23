@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏化对话 - AI陪聊产品</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #1a1a2e;
+            color: #fff;
+            line-height: 1.6;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* 移动端优化布局 */
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 直播间风格背景 */
+        .background-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(to bottom, #1a1a2e, #0f3460);
+            overflow: hidden;
+        }
+        
+        .floating-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-20vh) translateX(20vw);
+                opacity: 0;
+            }
+        }
+        
+        /* 头部控制栏 */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+        
+        .back-btn {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .live-badge {
+            background-color: #e74c3c;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        .viewer-count {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .menu-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        /* 主播信息 */
+        .streamer-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .streamer-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #6c5ce7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            border: 2px solid white;
+            box-shadow: 0 0 15px rgba(108, 92, 231, 0.5);
+        }
+        
+        .streamer-details {
+            flex: 1;
+        }
+        
+        .streamer-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 3px;
+        }
+        
+        .streamer-status {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .follow-btn {
+            background-color: #6c5ce7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        /* 对话内容区域 */
+        .chat-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        /* 系统消息 */
+        .system-message {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 10px 15px;
+            font-size: 0.8rem;
+            text-align: center;
+            max-width: 80%;
+            margin: 0 auto;
+            opacity: 0.8;
+        }
+        
+        /* 用户消息 */
+        .user-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            max-width: 85%;
+            align-self: flex-end;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #444;
+            font-size: 1.1rem;
+            order: 2;
+        }
+        
+        .user-bubble {
+            background-color: #3498db;
+            border-radius: 18px 18px 0 18px;
+            padding: 12px 15px;
+            font-size: 0.95rem;
+            position: relative;
+            order: 1;
+        }
+        
+        /* 主播消息 */
+        .streamer-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            max-width: 85%;
+        }
+        
+        .streamer-bubble {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 18px 18px 18px 0;
+            padding: 12px 15px;
+            font-size: 0.95rem;
+            position: relative;
+        }
+        
+        /* 互动选项 */
+        .interaction-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .option-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .option-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            color: #fff;
+            text-align: left;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-btn:hover, .option-btn:active {
+            background-color: rgba(108, 92, 231, 0.3);
+            border-color: #6c5ce7;
+        }
+        
+        /* 礼物动画 */
+        .gift-animation {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform: translate(-50%, 50%);
+            text-align: center;
+            color: white;
+            animation: giftAppear 3s forwards;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0;
+        }
+        
+        @keyframes giftAppear {
+            0% { 
+                opacity: 0;
+                transform: translate(-50%, 50%) scale(0.5);
+            }
+            20% { 
+                opacity: 1;
+                transform: translate(-50%, 50%) scale(1.2);
+            }
+            80% {
+                opacity: 1;
+                transform: translate(-50%, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+        
+        .gift-icon {
+            font-size: 3rem;
+            color: #f39c12;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .gift-text {
+            font-weight: bold;
+            font-size: 1rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px 15px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+        
+        /* 动画效果 */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 底部操作区 */
+        .bottom-controls {
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .message-input {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 12px 15px;
+            color: white;
+            font-size: 0.95rem;
+        }
+        
+        .message-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .message-input:focus {
+            outline: none;
+            border-color: #6c5ce7;
+        }
+        
+        .send-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: #6c5ce7;
+            border: none;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        .quick-action-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        /* 消息输入框展开状态 */
+        .input-expanded .chat-content {
+            height: calc(100vh - 200px);
+        }
+        
+        .input-expanded .interaction-options {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="background-effects">
+            <div class="floating-particles"></div>
+        </div>
+        
+        <div class="header">
+            <a href="character-select.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>返回</span>
+            </a>
+            
+            <div class="live-indicator">
+                <div class="live-badge">LIVE</div>
+                <div class="viewer-count">
+                    <i class="fas fa-eye"></i>
+                    <span>1,245</span>
+                </div>
+            </div>
+            
+            <button class="menu-btn">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+        </div>
+        
+        <div class="streamer-info">
+            <div class="streamer-avatar">
+                <i class="fas fa-microphone-alt"></i>
+            </div>
+            <div class="streamer-details">
+                <div class="streamer-name">夜语主播</div>
+                <div class="streamer-status">正在直播中 · 今日心情话题</div>
+            </div>
+            <button class="follow-btn">
+                <i class="fas fa-plus"></i> 关注
+            </button>
+        </div>
+        
+        <div class="chat-content">
+            <div class="system-message fade-in">
+                欢迎来到夜语的直播间！大家可以积极参与互动哦~
+            </div>
+            
+            <div class="streamer-message fade-in">
+                <div class="streamer-avatar">
+                    <i class="fas fa-microphone-alt"></i>
+                </div>
+                <div class="streamer-bubble">
+                    嗨，亲爱的朋友们，欢迎来到今晚的直播！我是夜语，很高兴能在这个安静的夜晚与大家相遇。今天我们来聊聊"生活中的小确幸"，有什么最近让你开心的小事吗？
+                </div>
+            </div>
+            
+            <div class="system-message fade-in">
+                用户"星辰闪烁"进入了直播间
+            </div>
+            
+            <div class="user-message fade-in">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-bubble">
+                    夜语姐好！今天下班路上看到一只小奶猫，超级可爱，感觉整天的疲惫都消失了！
+                </div>
+            </div>
+            
+            <div class="streamer-message fade-in">
+                <div class="streamer-avatar">
+                    <i class="fas fa-microphone-alt"></i>
+                </div>
+                <div class="streamer-bubble">
+                    啊，星辰你好呀！小奶猫确实有治愈的魔力呢！能够在忙碌的一天后遇到这样的小惊喜，真的会让人心情瞬间变好。有没有偷偷拍照呢？我超喜欢小动物的～
+                </div>
+            </div>
+            
+            <div class="system-message fade-in">
+                用户"梦幻旅人"送出了"星光熠熠"
+            </div>
+            
+            <div class="streamer-message fade-in">
+                <div class="streamer-avatar">
+                    <i class="fas fa-microphone-alt"></i>
+                </div>
+                <div class="streamer-bubble">
+                    哇！谢谢梦幻旅人的星光熠熠！你们的支持是我坚持直播的动力～ 今天大家心情都还好吗？
+                </div>
+            </div>
+            
+            <div class="user-message fade-in">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-bubble">
+                    夜语，最近工作压力好大，感觉每天都很疲惫，有什么解压的好方法吗？
+                </div>
+            </div>
+            
+            <div class="streamer-message fade-in">
+                <div class="streamer-avatar">
+                    <i class="fas fa-microphone-alt"></i>
+                </div>
+                <div class="streamer-bubble">
+                    理解你的感受，工作压力确实会让人身心俱疲。我个人觉得，可以尝试这几种方法：1. 短暂的冥想，哪怕只有5分钟，也能让大脑休息；2. 泡一杯你喜欢的茶或咖啡，慢慢品尝；3. 深呼吸，吸气5秒，屏息3秒，呼气7秒，重复几次。
+                    
+                    你最近有尝试做一些自己喜欢的事情来放松吗？有时候我们太专注工作，反而忘记了照顾自己的需要。
+                </div>
+            </div>
+        </div>
+        
+        <div class="interaction-options">
+            <div class="option-label">如何回应？</div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="window.location.href='chat-dialog.html'">
+                    谢谢你的建议！我会试试冥想，感觉对我会有帮助
+                </button>
+                <button class="option-btn" onclick="window.location.href='chat-dialog.html'">
+                    最近都没时间做喜欢的事，总是加班。你平时怎么平衡工作和生活？
+                </button>
+                <button class="option-btn" onclick="window.location.href='chat-dialog.html'">
+                    你的声音真的很治愈，听着就感觉放松了很多
+                </button>
+                <button class="option-btn" onclick="window.location.href='chat-dialog.html'">
+                    我想了解更多关于你的事情，平时有什么爱好？
+                </button>
+            </div>
+        </div>
+        
+        <div class="bottom-controls">
+            <button class="quick-action-btn">
+                <i class="fas fa-gift"></i>
+            </button>
+            <input type="text" class="message-input" placeholder="写下你想说的...">
+            <button class="send-btn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+        
+        <div class="gift-animation" id="gift-animation" style="display: none;">
+            <i class="fas fa-heart gift-icon"></i>
+            <div class="gift-text">梦幻旅人送出"星光熠熠"</div>
+        </div>
+    </div>
+    
+    <script>
+        // 生成浮动粒子
+        const particlesContainer = document.querySelector('.floating-particles');
+        const particleCount = 20;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // 随机大小
+            const size = Math.random() * 5 + 2;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // 随机位置
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100;
+            particle.style.left = `${posX}%`;
+            particle.style.top = `${posY}%`;
+            
+            // 随机动画延迟
+            const delay = Math.random() * 15;
+            particle.style.animationDelay = `${delay}s`;
+            
+            // 随机动画时长
+            const duration = Math.random() * 10 + 10;
+            particle.style.animationDuration = `${duration}s`;
+            
+            particlesContainer.appendChild(particle);
+        }
+        
+        // 礼物动画展示
+        setTimeout(() => {
+            const giftAnim = document.getElementById('gift-animation');
+            giftAnim.style.display = 'block';
+            
+            setTimeout(() => {
+                giftAnim.style.display = 'none';
+            }, 3000);
+        }, 5000);
+        
+        // 输入框交互
+        const messageInput = document.querySelector('.message-input');
+        const container = document.querySelector('.game-container');
+        
+        messageInput.addEventListener('focus', () => {
+            container.classList.add('input-expanded');
+        });
+        
+        messageInput.addEventListener('blur', () => {
+            container.classList.remove('input-expanded');
+        });
+    </script>
+</body>
+</html> 

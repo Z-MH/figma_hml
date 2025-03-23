@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
         }
         
         body {
@@ -25,856 +25,135 @@
             padding: 20px;
         }
         
-        h1 {
+        .header {
             text-align: center;
-            margin-bottom: 30px;
-            color: #333;
-        }
-        
-        .prototype-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        
-        .prototype {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            height: 600px;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .prototype-header {
-            padding: 15px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #eee;
-            text-align: center;
-            font-weight: bold;
-        }
-        
-        .prototype-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 15px;
-            position: relative;
-        }
-        
-        /* 首页/角色选择页 */
-        .home-page .search-bar {
-            display: flex;
-            margin-bottom: 20px;
-            padding: 10px;
-            background: #f1f3f5;
-            border-radius: 10px;
-        }
-        
-        .home-page .search-bar i {
-            margin-right: 10px;
-            color: #888;
-        }
-        
-        .category-tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
-        
-        .category-tab {
-            padding: 8px 15px;
-            margin-right: 10px;
-            border-radius: 20px;
-            background: #f1f3f5;
-            font-size: 14px;
-        }
-        
-        .category-tab.active {
-            background: #6c5ce7;
-            color: white;
-        }
-        
-        .role-card {
-            display: flex;
-            padding: 15px;
-            border-radius: 12px;
-            background: #f8f9fa;
-            margin-bottom: 15px;
-            align-items: center;
-        }
-        
-        .role-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: #ddd;
-            margin-right: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: #666;
-        }
-        
-        .role-info {
-            flex: 1;
-        }
-        
-        .role-name {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .role-desc {
-            font-size: 13px;
-            color: #666;
-        }
-        
-        .section-title {
-            margin: 20px 0 15px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .section-title .more {
-            font-size: 13px;
-            color: #6c5ce7;
-            font-weight: normal;
-        }
-        
-        .bottom-nav {
-            display: flex;
-            border-top: 1px solid #eee;
-            background: white;
-        }
-        
-        .nav-item {
-            flex: 1;
-            text-align: center;
-            padding: 12px;
-            color: #888;
-            font-size: 12px;
-        }
-        
-        .nav-item i {
-            display: block;
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-        
-        .nav-item.active {
-            color: #6c5ce7;
-        }
-        
-        /* 角色详情页 */
-        .role-detail .role-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .role-detail .role-avatar {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 15px;
-        }
-        
-        .role-detail .role-name {
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-        
-        .role-detail .role-tags {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        
-        .role-tag {
-            background: #f1f3f5;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            margin: 0 5px 5px 0;
-        }
-        
-        .role-description {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        
-        .action-button {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            background: #6c5ce7;
-            color: white;
-            text-align: center;
-            font-weight: bold;
-            margin-top: 20px;
-            border: none;
-        }
-        
-        /* 对话界面 */
-        .chat-page .chat-header {
-            display: flex;
-            align-items: center;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .chat-page .back-button {
-            margin-right: 15px;
-            font-size: 18px;
-        }
-        
-        .chat-page .role-avatar {
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
-        }
-        
-        .chat-messages {
-            padding: 15px 0;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .message {
-            max-width: 80%;
-            padding: 12px 15px;
-            border-radius: 18px;
-            margin-bottom: 15px;
-            position: relative;
-        }
-        
-        .message.received {
-            align-self: flex-start;
-            background: #f1f3f5;
-            border-bottom-left-radius: 5px;
-        }
-        
-        .message.sent {
-            align-self: flex-end;
-            background: #6c5ce7;
-            color: white;
-            border-bottom-right-radius: 5px;
-        }
-        
-        .quick-replies {
-            display: flex;
-            overflow-x: auto;
-            padding: 10px 0;
-            margin-top: auto;
-            border-top: 1px solid #eee;
-        }
-        
-        .quick-reply {
-            flex-shrink: 0;
-            padding: 8px 15px;
-            background: #f1f3f5;
-            border-radius: 18px;
-            margin-right: 10px;
-            font-size: 14px;
-            white-space: nowrap;
-        }
-        
-        .chat-input {
-            display: flex;
-            padding: 10px 0;
-            border-top: 1px solid #eee;
-            align-items: center;
-        }
-        
-        .chat-input i {
-            font-size: 20px;
-            color: #888;
-            margin: 0 10px;
-        }
-        
-        .chat-input input {
-            flex: 1;
-            padding: 10px 15px;
-            border-radius: 20px;
-            border: 1px solid #ddd;
-            outline: none;
-        }
-        
-        .chat-input .send-button {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #6c5ce7;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 10px;
-        }
-        
-        /* 角色创建/编辑页 */
-        .create-role .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .create-role label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        
-        .create-role input, .create-role textarea {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            outline: none;
-        }
-        
-        .create-role textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-        
-        .avatar-selector {
-            display: flex;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-        
-        .avatar-option {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: #ddd;
-            margin: 0 10px 10px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: #666;
-            border: 2px solid transparent;
-        }
-        
-        .avatar-option.selected {
-            border-color: #6c5ce7;
-        }
-        
-        /* 我的页面 */
-        .profile-page .user-info {
-            display: flex;
-            align-items: center;
+            margin-bottom: 40px;
             padding: 20px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .profile-page .user-avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: #ddd;
-            margin-right: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            color: #666;
-        }
-        
-        .profile-page .user-name {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        
-        .menu-list {
-            margin-top: 20px;
-        }
-        
-        .menu-item {
-            display: flex;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .menu-item i {
-            width: 30px;
-            font-size: 18px;
-            color: #6c5ce7;
-        }
-        
-        .menu-item .menu-title {
-            flex: 1;
-        }
-        
-        .menu-item .arrow {
-            color: #ccc;
-        }
-        
-        /* 游戏化对话相关样式 */
-        .game-chat {
-            background: #f8f9fa;
-            position: relative;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .game-chat-header {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .game-chat-header .back-button {
-            margin-right: 15px;
-            font-size: 18px;
-        }
-        
-        .familiarity-bar {
-            flex: 1;
-            height: 10px;
-            background: #e0e0e0;
-            border-radius: 5px;
-            margin: 0 10px;
-            overflow: hidden;
-        }
-        
-        .familiarity-progress {
-            height: 100%;
-            background: linear-gradient(90deg, #6c5ce7, #a29bfe);
-            border-radius: 5px;
-            width: 30%;
-        }
-        
-        .familiarity-level {
-            font-size: 12px;
-            color: #6c5ce7;
-            font-weight: bold;
-        }
-        
-        .character-container {
-            position: relative;
-            height: 250px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            background: linear-gradient(to bottom, #e9f5ff, #f8f9fa);
-        }
-        
-        .character-image {
-            height: 220px;
-            width: auto;
-            object-fit: contain;
-        }
-        
-        .character-placeholder {
-            height: 220px;
-            width: 150px;
-            background: rgba(108, 92, 231, 0.1);
+            background-color: #fff;
             border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
-        .character-placeholder i {
-            font-size: 40px;
+        h1 {
             color: #6c5ce7;
-            margin-bottom: 10px;
-        }
-        
-        .game-dialog-box {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            padding: 15px;
-            margin: 15px;
-            position: relative;
-        }
-        
-        .character-name {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #6c5ce7;
-        }
-        
-        .dialog-text {
             margin-bottom: 15px;
-            line-height: 1.5;
         }
         
-        .dialog-options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .dialog-option {
-            padding: 12px 15px;
-            background: #f1f3f5;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .dialog-option:hover {
-            background: #e9ecef;
-            transform: translateY(-2px);
-        }
-        
-        .dialog-option.selected {
-            background: #6c5ce7;
-            color: white;
-        }
-        
-        .emotion-indicator {
-            position: absolute;
-            top: -10px;
-            right: 15px;
-            background: white;
-            border-radius: 20px;
-            padding: 5px 10px;
-            font-size: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-        }
-        
-        .emotion-indicator i {
-            margin-right: 5px;
-            color: #ff9800;
-        }
-        
-        .unlock-notification {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
-            text-align: center;
-            z-index: 100;
-            width: 80%;
-            max-width: 300px;
-        }
-        
-        .unlock-icon {
-            width: 60px;
-            height: 60px;
-            background: #6c5ce7;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            font-size: 24px;
-        }
-        
-        .unlock-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-        
-        .unlock-desc {
+        .description {
             color: #666;
-            margin-bottom: 20px;
-            font-size: 14px;
+            max-width: 800px;
+            margin: 0 auto;
         }
         
-        .unlock-button {
-            background: #6c5ce7;
+        .prototype-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .prototype-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .prototype-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .prototype-card h3 {
+            color: #6c5ce7;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .prototype-card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .prototype-link {
+            display: inline-block;
+            background-color: #6c5ce7;
             color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
             font-weight: bold;
+            transition: background-color 0.3s ease;
         }
         
-        .familiarity-up {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #6c5ce7;
-            color: white;
-            border-radius: 20px;
-            padding: 5px 10px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            animation: fadeInOut 2s forwards;
+        .prototype-link:hover {
+            background-color: #5649c0;
         }
         
-        .familiarity-up i {
-            margin-right: 5px;
-        }
-        
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(10px); }
-            20% { opacity: 1; transform: translateY(0); }
-            80% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-10px); }
-        }
-        
-        /* 混合模式对话界面 */
-        .hybrid-chat-page .chat-header {
-            display: flex;
-            align-items: center;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .hybrid-chat-page .familiarity-info {
-            display: flex;
-            align-items: center;
-            margin-left: auto;
-            font-size: 12px;
-        }
-        
-        .hybrid-chat-page .familiarity-badge {
-            background: #6c5ce7;
-            color: white;
-            border-radius: 12px;
-            padding: 2px 8px;
-            margin-left: 5px;
-        }
-        
-        .hybrid-chat-page .character-container {
-            height: 150px;
-        }
-        
-        .hybrid-chat-page .character-placeholder {
-            height: 120px;
-            width: 100px;
-        }
-        
-        .hybrid-chat-page .character-placeholder i {
-            font-size: 30px;
-        }
-        
-        .hybrid-chat-page .game-mode-toggle {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: white;
-            border-radius: 20px;
-            padding: 5px 10px;
-            font-size: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
+        .prototype-icon {
+            font-size: 2rem;
             color: #6c5ce7;
-        }
-        
-        .hybrid-chat-page .game-mode-toggle i {
-            margin-right: 5px;
-        }
-        
-        .hybrid-chat-page .chat-input-container {
-            position: relative;
-        }
-        
-        .hybrid-chat-page .mode-indicator {
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(108, 92, 231, 0.1);
-            border-radius: 15px;
-            padding: 3px 10px;
-            font-size: 12px;
-            color: #6c5ce7;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>AI陪聊产品原型</h1>
+        <div class="header">
+            <h1>AI陪聊产品原型设计</h1>
+            <p class="description">这是一个AI陪聊产品的原型设计，包含游戏化对话和常规对话框两种交互模式，为用户提供个性化的AI角色陪伴体验。</p>
+        </div>
         
-        <div class="prototype-grid">
-            <!-- 现有的原型界面保持不变 -->
-            
-            <!-- 游戏化初次对话界面 -->
-            <div class="prototype game-chat">
-                <div class="prototype-header">游戏化初次对话</div>
-                <div class="prototype-content">
-                    <div class="game-chat-header">
-                        <i class="fas fa-arrow-left back-button"></i>
-                        <div class="familiarity-bar">
-                            <div class="familiarity-progress" style="width: 10%;"></div>
-                        </div>
-                        <div class="familiarity-level">Lv.1</div>
-                    </div>
-                    
-                    <div class="character-container">
-                        <div class="character-placeholder">
-                            <i class="fas fa-heart"></i>
-                            <span>心理咨询师小冉</span>
-                        </div>
-                        <div class="familiarity-up">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>熟悉度 +1</span>
-                        </div>
-                    </div>
-                    
-                    <div class="game-dialog-box">
-                        <div class="character-name">小冉</div>
-                        <div class="emotion-indicator">
-                            <i class="fas fa-smile"></i>
-                            <span>友好</span>
-                        </div>
-                        <div class="dialog-text">
-                            你好！我是心理咨询师小冉，很高兴认识你！今天是我们第一次见面，能告诉我你的名字吗？
-                        </div>
-                        <div class="dialog-options">
-                            <div class="dialog-option">
-                                你好，我叫小明，很高兴认识你！
-                            </div>
-                            <div class="dialog-option">
-                                我不太想透露我的名字，可以直接开始聊天吗？
-                            </div>
-                            <div class="dialog-option">
-                                嗨，你可以叫我昵称就好，我想了解一下你的专业背景
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="prototype-list">
+            <div class="prototype-card">
+                <div class="prototype-icon"><i class="fas fa-home"></i></div>
+                <h3>首页/登录界面</h3>
+                <p>产品的入口界面，包含登录注册功能</p>
+                <a href="login.html" class="prototype-link">查看原型</a>
             </div>
             
-            <!-- 游戏化对话进行中界面 -->
-            <div class="prototype game-chat">
-                <div class="prototype-header">游戏化对话进行中</div>
-                <div class="prototype-content">
-                    <div class="game-chat-header">
-                        <i class="fas fa-arrow-left back-button"></i>
-                        <div class="familiarity-bar">
-                            <div class="familiarity-progress" style="width: 45%;"></div>
-                        </div>
-                        <div class="familiarity-level">Lv.3</div>
-                    </div>
-                    
-                    <div class="character-container">
-                        <div class="character-placeholder" style="background: rgba(255, 205, 210, 0.2);">
-                            <i class="fas fa-heart" style="color: #e57373;"></i>
-                            <span>心理咨询师小冉</span>
-                        </div>
-                    </div>
-                    
-                    <div class="game-dialog-box">
-                        <div class="character-name">小冉</div>
-                        <div class="emotion-indicator">
-                            <i class="fas fa-hand-holding-heart"></i>
-                            <span>关心</span>
-                        </div>
-                        <div class="dialog-text">
-                            听起来你最近工作压力很大。压力过大确实会影响睡眠和生活质量。你平时有什么减压的方式吗？
-                        </div>
-                        <div class="dialog-options">
-                            <div class="dialog-option selected">
-                                我喜欢运动，但最近太忙没时间去健身了
-                            </div>
-                            <div class="dialog-option">
-                                我通常会看电影或者玩游戏放松，但效果不太好
-                            </div>
-                            <div class="dialog-option">
-                                我不知道该怎么减压，能给我一些建议吗？
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="game-dialog-box">
-                        <div class="character-name">小冉</div>
-                        <div class="dialog-text">
-                            运动确实是很好的减压方式！即使没时间去健身房，你也可以尝试一些简短的居家运动，比如10分钟的瑜伽或者高强度间歇训练。这些短时间的运动也能帮助释放压力，改善睡眠质量。
-                        </div>
-                        <div class="dialog-options">
-                            <div class="dialog-option">
-                                有什么简单的居家运动推荐吗？
-                            </div>
-                            <div class="dialog-option">
-                                除了运动，还有其他方法可以改善睡眠吗？
-                            </div>
-                            <div class="dialog-option">
-                                谢谢建议，我会尝试的
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="prototype-card">
+                <div class="prototype-icon"><i class="fas fa-user-astronaut"></i></div>
+                <h3>角色选择/创建界面</h3>
+                <p>用户可以选择或自定义AI角色</p>
+                <a href="character-select.html" class="prototype-link">查看原型</a>
             </div>
             
-            <!-- 解锁常规对话提示界面 -->
-            <div class="prototype game-chat">
-                <div class="prototype-header">解锁常规对话提示</div>
-                <div class="prototype-content">
-                    <div class="game-chat-header">
-                        <i class="fas fa-arrow-left back-button"></i>
-                        <div class="familiarity-bar">
-                            <div class="familiarity-progress" style="width: 80%;"></div>
-                        </div>
-                        <div class="familiarity-level">Lv.5</div>
-                    </div>
-                    
-                    <div class="character-container">
-                        <div class="character-placeholder" style="background: rgba(255, 205, 210, 0.3);">
-                            <i class="fas fa-heart" style="color: #e57373;"></i>
-                            <span>心理咨询师小冉</span>
-                        </div>
-                    </div>
-                    
-                    <div class="game-dialog-box">
-                        <div class="character-name">小冉</div>
-                        <div class="emotion-indicator">
-                            <i class="fas fa-grin-beam"></i>
-                            <span>开心</span>
-                        </div>
-                        <div class="dialog-text">
-                            我们已经聊了好几次了，感觉我们之间的沟通越来越顺畅了。我很高兴能帮助到你！
-                        </div>
-                        <div class="dialog-options">
-                            <div class="dialog-option">
-                                是的，谢谢你的建议，对我帮助很大
-                            </div>
-                            <div class="dialog-option">
-                                我也觉得和你聊天很舒服，像和朋友交流一样
-                            </div>
-                            <div class="dialog-option">
-                                希望以后能继续向你请教更多问题
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="unlock-notification">
-                        <div class="unlock-icon">
-                            <i class="fas fa-lock-open"></i>
-                        </div>
-                        <div class="unlock-title">解锁自由对话模式！</div>
-                        <div class="unlock-desc">
-                            恭喜！你与小冉的熟悉度已达到5级，现在可以使用自由对话模式，直接输入任何想说的话。
-                        </div>
-                        <button class="unlock-button">开始自由对话</button>
-                    </div>
-                </div>
+            <div class="prototype-card">
+                <div class="prototype-icon"><i class="fas fa-gamepad"></i></div>
+                <h3>游戏化对话界面</h3>
+                <p>初始的游戏化互动对话界面</p>
+                <a href="game-dialog.html" class="prototype-link">查看原型</a>
             </div>
             
-            <!-- 过渡到常规对话界面 -->
-            <div class="prototype chat-page">
-                <div class="prototype-header">过渡到常规对话</div>
-                <div class="prototype-content">
-                    <div class="chat-header">
-                        <i class="fas fa-arrow-left back-button"></i>
-                        <div class="role-avatar" style="background: #ffcdd2;">
+            <div class="prototype-card">
+                <div class="prototype-icon"><i class="fas fa-comments"></i></div>
+                <h3>对话框聊天界面</h3>
+                <p>常规的对话框形式聊天界面</p>
+                <a href="chat-dialog.html" class="prototype-link">查看原型</a>
+            </div>
+            
+            <div class="prototype-card">
+                <div class="prototype-icon"><i class="fas fa-id-card"></i></div>
+                <h3>角色详情界面</h3>
+                <p>展示AI角色的背景故事和特性</p>
+                <a href="character-detail.html" class="prototype-link">查看原型</a>
+            </div>
+            
+            <div class="prototype-card">
+                <div class="prototype-icon"><i class="fas fa-history"></i></div>
+                <h3>历史记录界面</h3>
+                <p>用户与AI的历史对话记录</p>
+                <a href="history.html" class="prototype-link">查看原型</a>
+            </div>
+            
+            <div class="prototype-card">
+                <div class="prototype-icon"><i class="fas fa-user-cog"></i></div>
+                <h3>个人中心界面</h3>
+                <p>用户个人资料和设置</p>
+                <a href="profile.html" class="prototype-link">查看原型</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
